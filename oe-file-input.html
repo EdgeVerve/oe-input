@@ -6,7 +6,6 @@
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../oe-field-behavior/oe-field-behavior.html">
-<link rel="import" href="behaviors/oe-utils-behavior.html">
 
 <!--
 ### oe-file-input
@@ -21,18 +20,17 @@ Images can be previewed before uploading.
 
   <template>
     <style>
-
     </style>
 
     <input type="file" id="fileInput" hidden accept="[[accept]]" on-change="_fileSelected" />
     <div id="dropArea" class="layout horizontal">
       <paper-button on-tap="_selectFile" raised>
 
-        <div hidden$="[[value]]">
+        <div hidden$="[[_and(!showDetails,value)]]">
           Choose or drop files
         </div>
 
-        <template is="dom-if" if=[[value]]>
+        <template is="dom-if" if=[[_and(showDetails,value)]]>
           <div class="layout vertical">
 
             <template is="dom-if" if=[[_isImage(fileType)]]>
@@ -44,6 +42,7 @@ Images can be previewed before uploading.
           </div>
         </template>
       </paper-button>
+      <content></content>
       <template is="dom-if" if="{{_and(postUrl,files)}}">
         <paper-icon-button icon="file-upload" on-tap="_uploadFiles"></paper-icon-button>
       </template>
@@ -72,15 +71,32 @@ Images can be previewed before uploading.
         type: String,
         notify: true
       },
+      fileType: {
+        type: String,
+        notify: true
+      },
+      fileSize: {
+        type: Number,
+        notify: true
+      },
       files: {
         type: Object
       },
       postUrl: {
         type: String
+      },
+      maxSize: {
+        type: Number
+      },
+      maxCount: {
+        type: Number
+      },
+      showDetails: {
+        type: Boolean
       }
     },
     behaviors: [
-      baseUtils.UtilsBehavior
+      baseUtils.FieldBehavior
     ],
     attached: function () {
       this.set('value', undefined);
@@ -106,6 +122,10 @@ Images can be previewed before uploading.
     _multipleChanged: function (newValue) {
       this.$.fileInput.multiple = newValue;
     },
+    _clearFiles: function () {
+      this.$.fileInput.value = '';
+      this.processFiles(undefined);
+    },
     _selectFile: function () {
       this.$.fileInput.click();
     },
@@ -118,6 +138,7 @@ Images can be previewed before uploading.
     processFiles: function (files) {
       this.set('fileName', undefined);
       this.set('fileType', undefined);
+      this.set('fileSize', undefined);
       this.set('files', files);
       if (this.multiple) {
         this.set('value', files);
@@ -126,6 +147,7 @@ Images can be previewed before uploading.
           this.set('value', this.files[0]);
           this.set('fileName', this.files[0].name);
           this.set('fileType', this.files[0].type);
+          this.set('fileSize', this.files[0].size);
         } else {
           this.set('value', undefined);
         }
@@ -134,7 +156,7 @@ Images can be previewed before uploading.
         if (this.files && this.files.length > 0) {
           this.set('fileName', this.files[0].name);
           this.set('fileType', this.files[0].type);
-
+          this.set('fileSize', this.files[0].size);
           var reader = new FileReader();
           reader.onloadend = function (evt) {
             if (evt.target.readyState == FileReader.DONE) {
