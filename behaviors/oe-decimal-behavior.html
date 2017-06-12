@@ -57,10 +57,10 @@
   })();
 
 
-  var baseUtils = baseUtils || {};
+  var OEUtils = OEUtils || {};
 
   /* @polymerBehavior */
-  baseUtils.DecimalInputBehaviorImpl = {
+  OEUtils.DecimalInputBehaviorImpl = {
 
     properties: {
       value: {
@@ -254,9 +254,9 @@
   };
 
   /* @polymerBehavior */
-  baseUtils.DecimalInputBehavior = [
+  OEUtils.DecimalInputBehavior = [
     Polymer.PaperInputBehavior,
-    baseUtils.DecimalInputBehaviorImpl
+    OEUtils.DecimalInputBehaviorImpl
   ];
 
 </script>
