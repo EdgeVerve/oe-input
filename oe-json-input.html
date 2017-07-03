@@ -45,15 +45,19 @@ CSS Variable | Description | Default
       :host {
         display: block;
       }
-
+      span.required {
+        vertical-align: bottom;
+        color: var(--paper-input-container-invalid-color, --paper-deep-orange-a700);
+      }
     </style>
 
     <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
       auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
 
       <label hidden$="[[!label]]">
-                <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
-            </label>
+        <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
+        <template is="dom-if" if={{required}}><span class="required"> *</span></template>
+      </label>
 
       <iron-autogrow-textarea id="input" class="paper-input-input" bind-value="{{displayValue}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
         autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
@@ -131,9 +135,9 @@ CSS Variable | Description | Default
         obj = JSON.parse(this.displayValue);
       } catch (e) {
         obj = null;
-        this.setValidity(false, 'invalidValue');
       }
       this.set('value', obj);
+      this.validate();
     },
     _valueChanged: function (nVal, oVal) { //eslint-disable-line no-unused-vars
       var text = undefined;
