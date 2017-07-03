@@ -23,8 +23,8 @@
   <link rel="import" href="letters-only.html">
 
   <script>
-    var EV = EV || {};
-    EV.customValidatorFunc = function (value) {
+    var OEUtils = OEUtils || {};
+    OEUtils.customValidatorFunc = function (value) {
       var isValid = !value || (value.length == 4 && value[0] === 'A') || (value.length == 6 && value[0] === 'B');
       if (!isValid) {
         this.setValidity(false, 'custom-validation-failed');
@@ -139,7 +139,7 @@
 
   <test-fixture id="custom">
     <template>
-      <oe-input validation-function="EV.customValidatorFunc"></oe-input>
+      <oe-input validation-function="OEUtils.customValidatorFunc"></oe-input>
     </template>
   </test-fixture>
 

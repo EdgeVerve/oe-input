@@ -24,8 +24,8 @@
   <link rel="import" href="../oe-textarea.html">
 
   <script>
-    window.EV = window.EV || {};
-    window.EV.shouldAllBeLowercase = function (value) {
+    window.OEUtils = window.OEUtils || {};
+    window.OEUtils.shouldAllBeLowercase = function (value) {
       var isValid = true;
       if (value && (value.toLowerCase() !== value)) {
         isValid = false;
@@ -83,7 +83,7 @@
     <demo-snippet>
       <template>
         <template is="dom-bind">
-          <oe-input label="Custom Validator" required validate-on-input validation-function="EV.shouldAllBeLowercase"></oe-input>
+          <oe-input label="Custom Validator" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"></oe-input>
         </template>
       </template>
     </demo-snippet>
