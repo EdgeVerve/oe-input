@@ -31,7 +31,7 @@
 <dom-module id="oe-input-masked">
   <template>
     <style>
-      :host {
+       :host {
         display: block;
       }
 
@@ -153,6 +153,8 @@
 
       //don't do anything if ctrl or alt key is pressed
       if (evt.ctrlKey || evt.altKey) {
+        if ([8, 46].indexOf(evt.keyCode) > -1)
+          evt.preventDefault();
         return;
       }
 
