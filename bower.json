@@ -9,12 +9,12 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
-    "oe-input-error": "http://github.com/EdgeVerve/oe-input-error.git",
-    "oe-i18n-msg": "http://github.com/EdgeVerve/oe-i18n-msg.git",
+    "oe-input-error": "https://github.com/EdgeVerve/oe-input-error.git",
+    "oe-i18n-msg": "https://github.com/EdgeVerve/oe-i18n-msg.git",
     "paper-input": "^1.1.24",
-    "oe-field-behavior": "http://github.com/EdgeVerve/oe-field-behavior.git",
+    "oe-field-behavior": "https://github.com/EdgeVerve/oe-field-behavior.git",
     "iron-validator-behavior": "^1.0.2",
-    "oe-data-mask-behavior": "http://github.com/EdgeVerve/oe-data-mask-behavior.git"
+    "oe-data-mask-behavior": "https://github.com/EdgeVerve/oe-data-mask-behavior.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
