@@ -44,13 +44,20 @@ CSS Variable | Description | Default
       :host {
         display: block;
       }
+      span.required {
+        vertical-align: bottom;
+        color: var(--paper-input-container-invalid-color, --paper-deep-orange-a700);
+      }
 
     </style>
 
     <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
       auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
 
-      <label hidden$="[[!label]]"><oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg></label>
+      <label hidden$="[[!label]]">
+        <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
+        <template is="dom-if" if={{required}}><span class="required"> *</span></template>
+      </label>
 
       <iron-autogrow-textarea id="input" class="paper-input-input" bind-value="{{value}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
         autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
