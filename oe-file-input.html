@@ -21,22 +21,27 @@ Images can be previewed before uploading.
 
   <template>
     <style>
-
+      .launch-btn{
+          height: auto;
+      }
+      img.preview-img{
+        margin: 8px 0px;
+      }
     </style>
 
     <input type="file" id="fileInput" hidden accept="[[accept]]" on-change="_fileSelected" />
     <div id="dropArea" class="layout horizontal">
-      <paper-button on-tap="_selectFile" raised>
+      <paper-button on-tap="_selectFile" raised class="launch-btn">
 
-        <div hidden$="[[value]]">
+        <div hidden$="[[_hasValue(value)]]">
           Choose or drop files
         </div>
 
-        <template is="dom-if" if=[[value]]>
+        <template is="dom-if" if=[[_hasValue(value)]]>
           <div class="layout vertical">
 
             <template is="dom-if" if=[[_isImage(fileType)]]>
-              <img src="[[value]]" width="100px" height="100px">
+              <img class="preview-img" src="[[value]]" width="100px" height="100px">
             </template>
             <template is="dom-repeat" items={{_listToArray(files)}}>
               <label>{{item.name}}</label>
@@ -101,11 +106,14 @@ Images can be previewed before uploading.
         self.processFiles(e.dataTransfer.files);
       }, false);
     },
+    _hasValue:function(value){
+      return !!value;
+    },
     _and: function (a, b) {
       return a && b;
     },
     _isImage: function (type) {
-      return type && type.startsWith('image');
+      return (this.valueType !== 'binary') && type && type.startsWith('image');
     },
     _multipleChanged: function (newValue) {
       this.$.fileInput.multiple = newValue;
