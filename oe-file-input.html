@@ -4,6 +4,7 @@
 -->
 
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-image/iron-image.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../oe-field-behavior/oe-field-behavior.html">
 <link rel="import" href="behaviors/oe-utils-behavior.html">
@@ -21,27 +22,25 @@ Images can be previewed before uploading.
 
   <template>
     <style>
-      .launch-btn{
-          height: auto;
-      }
-      img.preview-img{
+      .preview-img {
+        border: 1px solid var(--image-preview-border,#D4D4D4);
         margin: 8px 0px;
+      }
+      .launch-button{
+        height: auto;
       }
     </style>
 
     <input type="file" id="fileInput" hidden accept="[[accept]]" on-change="_fileSelected" />
     <div id="dropArea" class="layout horizontal">
-      <paper-button on-tap="_selectFile" raised class="launch-btn">
-
-        <div hidden$="[[_hasValue(value)]]">
+      <paper-button on-tap="_selectFile" raised>
+        <div hidden$="[[value]]">
           Choose or drop files
         </div>
-
-        <template is="dom-if" if=[[_hasValue(value)]]>
-          <div class="layout vertical">
-
+        <template is="dom-if" if=[[value]]>
+          <div class="file-preview layout vertical">
             <template is="dom-if" if=[[_isImage(fileType)]]>
-              <img class="preview-img" src="[[value]]" width="100px" height="100px">
+              <iron-image src="[[value]]" style="width:100px;height:100px" sizing="contain" class="preview-img"></iron-image>
             </template>
             <template is="dom-repeat" items={{_listToArray(files)}}>
               <label>{{item.name}}</label>
@@ -77,10 +76,6 @@ Images can be previewed before uploading.
         type: String,
         notify: true
       },
-      fileType:{
-        type: String,
-        notify: true
-      },
       files: {
         type: Object
       },
@@ -106,14 +101,11 @@ Images can be previewed before uploading.
         self.processFiles(e.dataTransfer.files);
       }, false);
     },
-    _hasValue:function(value){
-      return !!value;
-    },
     _and: function (a, b) {
       return a && b;
     },
     _isImage: function (type) {
-      return (this.valueType !== 'binary') && type && type.startsWith('image');
+      return type && type.startsWith('image');
     },
     _multipleChanged: function (newValue) {
       this.$.fileInput.multiple = newValue;
