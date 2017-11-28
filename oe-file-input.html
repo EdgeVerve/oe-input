@@ -111,6 +111,8 @@ Images can be previewed before uploading.
       this.$.fileInput.multiple = newValue;
     },
     _selectFile: function () {
+      //reseting fileInput value before launching the file picker
+      this.$.fileInput.value = null;
       this.$.fileInput.click();
     },
     _listToArray: function (list) {
