@@ -16,6 +16,16 @@
 The files can be selected either by using the file picker dialog or by dragging and dropping into the control.
 Images can be previewed before uploading.
 
+`valueType` property specifies how the selected file data is loaded and set as `value` property.
+
+|multiple |valueType|value    |Description|
+|---------|---------|---------|-----------|
+| true    |   -     | [File]| When `multiple` is set as true, the `valueType` is ignored and `value` is always set as Array[`File`].|
+| false   | file    | File    | Selected `File` object is set as-it-is to the value|
+| false   | stream  | Data Stream| The selected file is read as data-url and is set as value|
+| false   | binary  | Binary file content| The file contents are read as binary string and set as value|
+
+@demo demo/demo-oe-file-input.html
 -->
 
 <dom-module id="oe-file-input">
@@ -58,27 +68,34 @@ Images can be previewed before uploading.
   Polymer({
     is: 'oe-file-input',
     properties: {
+      /* Allow multiple files to be selected */
       multiple: {
         type: Boolean,
         observer: '_multipleChanged'
       },
+      /* File types to be allowed as specified [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept)*/
       accept: {
         type: String
       },
+      /* Specifies what information is extracted from the selected file and set as value*/
       valueType: {
         type: String
       },
+      /* Current value depending on the specified _valueType_ */
       value: {
         type: Object,
         notify: true
       },
+      /* Name of the currently selected file */
       fileName: {
         type: String,
         notify: true
       },
+      /* Currently selected files */
       files: {
         type: Object
       },
+      /* If set, the selected file data is uploaded to this Url */
       postUrl: {
         type: String
       }
@@ -170,7 +187,6 @@ Images can be previewed before uploading.
 
         Promise.all(promises).then(function (results) {
           self.fire('files-uploaded', results);
-          //console.log('back from all promises', results);
         });
       }
     },
@@ -189,6 +205,12 @@ Images can be previewed before uploading.
         xhr.send(fd);
       });
     }
+  /**
+  * Fired when `element` changes its awesomeness level.
+  *
+  * @event files-uploaded
+  * @param server response for upload.
+  */
   });
 
 </script>

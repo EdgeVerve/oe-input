@@ -26,11 +26,31 @@
 
 <body unresolved>
   <div class="vertical-section-container centered">
-    <h3>File Input Demo</h3>
+    <h3>File Input</h3>
     <demo-snippet>
       <template>
-        <oe-file-input value-type="stream" rest-url="....."></oe-file-input>
         <oe-file-input value-type="stream"></oe-file-input>
+      </template>
+    </demo-snippet>
+
+    <h3>With Upload button</h3>
+    <demo-snippet>
+      <template>
+          <oe-file-input value-type="stream" post-url="....."></oe-file-input>
+      </template>
+    </demo-snippet>
+
+    <h3>Multiple Files</h3>
+    <demo-snippet>
+      <template>
+        <oe-file-input multiple value-type="stream"></oe-file-input>
+      </template>
+    </demo-snippet>
+    
+    <h3>Accept only pdf Files</h3>
+    <demo-snippet>
+      <template>
+        <oe-file-input accept="application/pdf" value-type="stream"></oe-file-input>
       </template>
     </demo-snippet>
   </div>
