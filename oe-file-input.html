@@ -33,10 +33,11 @@ Images can be previewed before uploading.
   <template>
     <style>
       .preview-img {
-        border: 1px solid var(--image-preview-border,#D4D4D4);
+        border: 1px solid var(--image-preview-border, #D4D4D4);
         margin: 8px 0px;
       }
-      .launch-button{
+
+      .launch-button {
         height: auto;
       }
     </style>
@@ -98,6 +99,12 @@ Images can be previewed before uploading.
       /* If set, the selected file data is uploaded to this Url */
       postUrl: {
         type: String
+      },
+      /*Passes the required fields to the file upload method.
+        It is a key value pair passed as it is to the formdata.
+      */
+      uploadAttributes: {
+        type: Object
       }
     },
     behaviors: [
@@ -191,6 +198,7 @@ Images can be previewed before uploading.
       }
     },
     sendFile: function (file, url) {
+      var attributes = this.get('uploadAttributes') || {};
       return new Promise(function (resolve, reject) { // eslint-disable-line no-unused-vars
         var xhr = new XMLHttpRequest();
         var fd = new FormData();
@@ -201,16 +209,19 @@ Images can be previewed before uploading.
             resolve(JSON.parse(xhr.responseText).result.files.file[0]);
           }
         };
+        Object.keys(attributes).forEach(function (attr) {
+          fd.append(attr, attributes[attr]);
+        });
         fd.append('file', file);
         xhr.send(fd);
       });
     }
-  /**
-  * Fired when `element` changes its awesomeness level.
-  *
-  * @event files-uploaded
-  * @param server response for upload.
-  */
+    /**
+    * Fired when `element` changes its awesomeness level.
+    *
+    * @event files-uploaded
+    * @param server response for upload.
+    */
   });
 
 </script>
