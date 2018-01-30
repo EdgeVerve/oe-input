@@ -1,4 +1,4 @@
-<!-- 
+<!--
   ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
   Bangalore, India. All Rights Reserved.
 -->
@@ -108,10 +108,10 @@
           'required': true,
           'maxlength': 3
         };
-        for (var attr in attrs) {
+        Object.keys(attrs).forEach(function(attr) {
           input[attr] = attrs[attr];
-        }
-        for (var attr in attrs) { // eslint-disable-line no-redeclare
+        });
+        Object.keys(attrs).forEach(function(attr) {
           var inputAttr = input.inputElement.getAttribute(attr);
           if (typeof attrs[attr] === 'boolean') {
             assert.equal(inputAttr !== null, attrs[attr], 'attribute "' + attr + '" is equal to property (' +
@@ -120,7 +120,7 @@
             assert.equal(inputAttr, attrs[attr], 'attribute "' + attr + '" is equal to property (' + attrs[attr] +
               ', ' + inputAttr + ')');
           }
-        }
+        });
       });
 
       test('always-float-label attribute works', function () {
