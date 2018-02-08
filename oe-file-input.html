@@ -209,7 +209,7 @@ Images can be previewed before uploading.
             resolve(JSON.parse(xhr.responseText).result.files.file[0]);
           }
         };
-        Object.keys(attributes).forEach(function (attr) {
+        attributes && Object.keys(attributes).forEach(function (attr) {
           fd.append(attr, attributes[attr]);
         });
         fd.append('file', file);
