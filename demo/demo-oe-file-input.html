@@ -50,7 +50,7 @@
         <h3>Custom File upload with individual upload</h3>
         <demo-snippet>
             <template>
-        <oe-file-input multiple value-type="stream" post-url="http://localhost:3000/api/containers/12823424/upload" >
+        <oe-file-input multiple value-type="stream" post-url="api/containers/12823424/upload" >
                 <template custom-upload>        
                  
             <div style="border: 1px dotted;height: 150px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
@@ -86,7 +86,7 @@
         <h3>Custom File upload with bulk upload</h3>
         <demo-snippet>
             <template>
-        <oe-file-input isbulk-upload multiple value-type="stream" post-url="http://localhost:3000/api/containers/12823424/upload" >
+        <oe-file-input isbulk-upload multiple value-type="stream" post-url="api/containers/12823424/upload" >
                 <template custom-upload>        
                  
             <div style="border: 1px dotted;height: 185px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">

@@ -65,10 +65,7 @@ Images can be previewed before uploading.
         <paper-icon-button icon="file-upload" on-tap="uploadFiles"></paper-icon-button>
       </template>
     </div>
-
-
     </template>
-
     </template>
 </dom-module>
 <script>
@@ -85,7 +82,6 @@ Images can be previewed before uploading.
                 type: Boolean,
                 value: false
             },
-
             /* File types to be allowed as specified [here](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-accept)*/
             accept: {
                 type: String
@@ -145,7 +141,6 @@ Images can be previewed before uploading.
             var element = this.$.dropArea;
             var self = this;
         },
-
         //on dragenter or drag over into drop area
         dragEnterOver: function(e) {
             e.preventDefault()
@@ -217,8 +212,7 @@ Images can be previewed before uploading.
                 }
             }
         },
-
-        //performs the upload action. Needs postUrl to be set.
+        //perform the upload action. Needs postUrl to be set.
         uploadFiles: function(e) { // eslint-disable-line no-unused-vars
             var self = this;
             var promises = [];
@@ -274,18 +268,18 @@ Images can be previewed before uploading.
                         var value = {
                             fileName: JSON.parse(xhr.responseText).result[0]
                         }
-                        self.set("_uploadResult", value)
+                        self.set("__uploadResult", value)
 
-                        resolve(self._uploadResult);
+                        resolve(self.__uploadResult);
 
                     } else if (xhr.readyState == 4 && xhr.status == 0) { //request abort
 
                         var value = {
                             fileName: "Aborted File Upload"
                         }
-                        self.set("_uploadResult", value)
+                        self.set("__uploadResult", value)
 
-                        resolve(self._uploadResult);
+                        resolve(self.__uploadResult);
                     }
 
                 };
@@ -343,23 +337,16 @@ Images can be previewed before uploading.
                 this.instance.fileName = fileName;
         },
         _updateValue: function(value) {
-            if (this.instance)
-                this.instance.value = value;
-        }
-
-        /**
-         * Fired when `element` changes its awesomeness level.
-         *
-         * @event files-uploaded
-         * @param server response for upload.
-         */
-
-        /**
-         * Fired when file upload is aborted by the user.
-         *
-         * @event files-upload-aborted
-         * @param server response for upload.
-         */
-
+                if (this.instance)
+                    this.instance.value = value;
+            }
+            /**Occurs on succesful upload of the files
+             *
+             *@event files-uploaded
+             **/
+            /**Occurs on succesful cancel or abort of the files
+             *
+             *@event files-upload-aborted
+             **/
     });
 </script>
