@@ -6,54 +6,126 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
 
-  <title>oe-ui demo</title>
+    <title>oe-ui demo</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../paper-styles/paper-styles.html">
-  <link rel="import" href="custom-styles.html">
-  <link rel="import" href="utils.html">
-
-  <link rel="import" href="../oe-file-input.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../paper-styles/paper-styles.html">
+    <link rel="import" href="custom-styles.html">
+    <link rel="import" href="utils.html">
+    <link rel="import" href="../../paper-progress/paper-progress.html">
+    <link rel="import" href="../oe-file-input.html">
 
 </head>
 
 <body unresolved>
-  <div class="vertical-section-container centered">
-    <h3>File Input</h3>
-    <demo-snippet>
-      <template>
+    <div class="vertical-section-container centered">
+        <h3>File Input</h3>
+        <demo-snippet>
+            <template>
         <oe-file-input value-type="stream"></oe-file-input>
       </template>
-    </demo-snippet>
+        </demo-snippet>
 
-    <h3>With Upload button</h3>
-    <demo-snippet>
-      <template>
+        <h3>With Upload button</h3>
+        <demo-snippet>
+            <template>
           <oe-file-input value-type="stream" post-url="....."></oe-file-input>
       </template>
-    </demo-snippet>
+        </demo-snippet>
 
-    <h3>Multiple Files</h3>
-    <demo-snippet>
-      <template>
+        <h3>Multiple Files</h3>
+        <demo-snippet>
+            <template>
         <oe-file-input multiple value-type="stream"></oe-file-input>
       </template>
-    </demo-snippet>
-    
-    <h3>Accept only pdf Files</h3>
-    <demo-snippet>
-      <template>
+        </demo-snippet>
+
+        <h3>Custom File upload with individual upload</h3>
+        <demo-snippet>
+            <template>
+        <oe-file-input multiple value-type="stream" post-url="http://localhost:3000/api/containers/12823424/upload" >
+                <template custom-upload>        
+                 
+            <div style="border: 1px dotted;height: 150px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
+                <div style="padding:10px;">
+                    <iron-icon icon="icons:file-upload"></iron-icon>
+                </div>
+                <div style="padding:10px;"><span style="padding-left: 6px;">drop files here or</span> </div>
+                <div style="padding:10px;">
+                    <paper-button on-tap="_selectFile" raised>
+                        Choose or drop files
+                    </div></paper-button>
+                </div>
+            </div>
+            <div>
+              
+            </div>
+            <template is="dom-repeat" items={{listToArray(files)}}>
+                    <div>
+                <label>{{item.name}}</label> 
+                <paper-icon-button icon="file-upload" on-tap="uploadFiles"></paper-icon-button>
+                <paper-icon-button icon="cancel" on-tap="abortFileUpload"></paper-icon-button>
+                 
+                </div> 
+               
+              </template>
+
+
+
+            </template>
+            </oe-file-input>
+            </template>
+        </demo-snippet>
+        <h3>Custom File upload with bulk upload</h3>
+        <demo-snippet>
+            <template>
+        <oe-file-input isbulk-upload multiple value-type="stream" post-url="http://localhost:3000/api/containers/12823424/upload" >
+                <template custom-upload>        
+                 
+            <div style="border: 1px dotted;height: 185px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
+                <div style="padding:10px;">
+                    <iron-icon icon="icons:file-upload"></iron-icon>
+                </div>
+                <div style="padding:10px;"><span style="padding-left: 6px;">drop files here or</span> </div>
+                <div style="padding:10px;">
+                    <paper-button on-tap="_selectFile" raised>
+                        Choose or drop files
+                    </div></paper-button>
+                    <paper-button  on-tap="uploadFiles">upload</paper-icon-button>
+                    <paper-button icon="cancel" on-tap="abortFileUpload">Cancel</paper-icon-button>
+                </div>
+            </div>
+ 
+            <template is="dom-repeat" items={{listToArray(files)}}>
+                    <div>
+                <label>{{item.name}}</label> 
+                
+                 
+                </div> 
+               
+              </template>
+
+
+
+            </template>
+            </oe-file-input>
+            </template>
+        </demo-snippet>
+
+        <h3>Accept only pdf Files</h3>
+        <demo-snippet>
+            <template>
         <oe-file-input accept="application/pdf" value-type="stream"></oe-file-input>
       </template>
-    </demo-snippet>
-  </div>
+        </demo-snippet>
+    </div>
 </body>
 
 </html>
