@@ -36,7 +36,7 @@ CSS Variable | Description | Default
 @demo demo/demo-oe-input.html
 -->
 <dom-module id="oe-input">
-  <template>
+    <template>
     <style>
       :host {
         display: block;
@@ -75,48 +75,41 @@ CSS Variable | Description | Default
       <label hidden$="[[!label]]">
           <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
           <template is="dom-if" if={{required}}><span class="required"> *</span></template>
-      </label>
-      <input is="iron-input" id="input" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
-        bind-value="{{value}}" invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]"
-        validator="[[validator]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]"
-        autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]"
-        max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]"
-        size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]" on-change="_onChange" tabindex$="[[tabindex]]"
+    </label>
+    <input is="iron-input" id="input" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]" bind-value="{{value}}" invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]"
+        validator="[[validator]]" type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]"
+        max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]" on-change="_onChange" tabindex$="[[tabindex]]"
         autosave$="[[autosave]]" results$="[[results]]" accept$="[[accept]]" multiple$="[[multiple]]">
-      <content select="[suffix]"></content>
-      <oe-input-error invalid={{invalid}} placeholders={{errorPlaceholders}} error-message={{errorMessage}}></oe-input-error>
-      <template is="dom-if" if="[[charCounter]]">
+    <content select="[suffix]"></content>
+    <oe-input-error invalid={{invalid}} placeholders={{errorPlaceholders}} error-message={{errorMessage}}></oe-input-error>
+    <template is="dom-if" if="[[charCounter]]">
         <paper-input-char-counter></paper-input-char-counter>
       </template>
     </paper-input-container>
-  </template>
+    </template>
 </dom-module>
 <script>
-  HTMLImports.whenReady(function () {
-
     Polymer({
-      is: 'oe-input',
-      properties: {},
-      listeners: {
-        'change': 'validate'
-      },
-      behaviors: [
-        Polymer.IronFormElementBehavior,
-        Polymer.PaperInputBehavior,
-        OEUtils.FieldBehavior
-      ],
-      _validate: function () {
-        var isValid = true;
-        if (this.maxlength && this.value && this.value.length > this.maxlength) {
-          this.setValidity(false, 'tooLong');
-          isValid = false;
-        } else if (this.minlength && this.value && this.value.length < this.minlength) {
-          this.setValidity(false, 'tooShort');
-          isValid = false;
+        is: 'oe-input',
+        properties: {},
+        listeners: {
+            'change': 'validate'
+        },
+        behaviors: [
+            Polymer.IronFormElementBehavior,
+            Polymer.PaperInputBehavior,
+            OEUtils.FieldBehavior
+        ],
+        _validate: function() {
+            var isValid = true;
+            if (this.maxlength && this.value && this.value.length > this.maxlength) {
+                this.setValidity(false, 'tooLong');
+                isValid = false;
+            } else if (this.minlength && this.value && this.value.length < this.minlength) {
+                this.setValidity(false, 'tooShort');
+                isValid = false;
+            }
+            return isValid;
         }
-        return isValid;
-      }
     });
-  });
-
 </script>

@@ -108,10 +108,10 @@
           'required': true,
           'maxlength': 3
         };
-        Object.keys(attrs).forEach(function(attr) {
+        attrs && Object.keys(attrs).forEach(function(attr) {
           input[attr] = attrs[attr];
         });
-        Object.keys(attrs).forEach(function(attr) {
+        attrs && Object.keys(attrs).forEach(function(attr) {
           var inputAttr = input.inputElement.getAttribute(attr);
           if (typeof attrs[attr] === 'boolean') {
             assert.equal(inputAttr !== null, attrs[attr], 'attribute "' + attr + '" is equal to property (' +
