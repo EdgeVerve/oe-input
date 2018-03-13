@@ -72,7 +72,7 @@
     <demo-snippet>
       <template>
         <oe-input label="Required field" required auto-validate></oe-input>
-        <oe-input label="Required field with custom error" required auto-validate error-message="needs some text!"></oe-input>
+        <oe-input label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
         <oe-input label="this input will only let you type letters" auto-validate allowed-pattern="[a-zA-Z]"></oe-input>
         <oe-input label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
         <oe-input id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
@@ -93,6 +93,20 @@
       </template>
     </demo-snippet>
 
+    <h3>Inputs can have user-error-messages</h3>
+    <demo-snippet>
+      <template>
+        <template is="dom-bind">
+          <div style="padding-top:20px;">Displays user specified string error message, irrespective of error type</div>
+          <oe-input required minlength=4 user-error-message="Field is required and should have min 4 chars" label="As String" ></oe-input>
+          <div style="padding-top:20px;">Displays user specified error messages including a user specified default</div>
+          <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters", "default":"Value in field is invalid"}' label="As Object"></oe-input>
+          <div style="padding-top:20px;">Displays default error messages from framework</div>
+          <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters"}' label="As Object, no default"></oe-input>
+        </template>
+      </template>
+    </demo-snippet>
+    
     <h3>Inputs can have prefixes and suffixes</h3>
     <demo-snippet class="horizontal">
       <template>
