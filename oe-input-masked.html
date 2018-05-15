@@ -108,6 +108,7 @@
       }
 
     },
+    observers:['_reformat(value,maskPattern,maskChar)'],
     listeners: {
       'change': 'validate',
       'keydown': '_buildValue',
@@ -222,6 +223,13 @@
     _focused: function () {
       this.set('formattedDisplay', '');
       this.set('formattedDisplay', this.value);
+    },
+
+    _reformat: function(v,p,c){
+      this.set('formattedDisplay', '');
+      this.set('formattedDisplay', this.value);
+      (this.appendCharLength > 0 && this.display.length) && this.set('display', this.display + new Array(this.appendCharLength +
+        1).join(this.maskChar));
     }
   });
 

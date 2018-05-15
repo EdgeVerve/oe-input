@@ -32,7 +32,7 @@
     <h3>Inputs can have sequence of numbers which can be hidden</h3>
     <demo-snippet>
       <template>
-        <oe-input-masked mask-pattern="[\d]{4}" mask-pattern-flag="g"></oe-input-masked>
+        <oe-input-masked label="Pattern [\d]{4}" mask-pattern="[\d]{4}" mask-pattern-flag="g"></oe-input-masked>
       </template>
     </demo-snippet>
 
@@ -44,7 +44,7 @@
     <h3>Inputs can hide every character typed</h3>
     <demo-snippet>
       <template>
-        <oe-input-masked mask-pattern=".*" mask-pattern-flag="g" mask-char="*"></oe-input-masked>
+        <oe-input-masked label="Pattern .*" mask-pattern=".*" mask-pattern-flag="g" mask-char="*"></oe-input-masked>
       </template>
     </demo-snippet>
 
@@ -55,7 +55,7 @@
     <h3>Inputs can append specified number of masking char after blur</h3>
     <demo-snippet>
       <template>
-        <oe-input-masked mask-pattern=".*" mask-pattern-flag="g" mask-char="*" append-char-length=20></oe-input-masked>
+        <oe-input-masked value="s3cr3t" label="append-char-length=20" mask-pattern=".*" mask-pattern-flag="g" mask-char="*" append-char-length=20></oe-input-masked>
       </template>
     </demo-snippet>
 
