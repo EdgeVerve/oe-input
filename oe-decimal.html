@@ -82,7 +82,7 @@ CSS Variable | Description | Default
       </label>
 
       <!--TODO : pattern, minlength,maxlength, type etc are not required. -->
-      <input is="iron-input" id="input" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
+      <input is="iron-input" id="[[_inputId]]" on-change="_displayChanged" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
         invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]" validator="[[validator]]"
         type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]"
         inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
@@ -106,6 +106,7 @@ CSS Variable | Description | Default
     behaviors: [
       Polymer.IronFormElementBehavior,
       Polymer.IronValidatableBehavior,
+      Polymer.PaperInputBehavior,
       OEUtils.DecimalInputBehavior,
       OEUtils.FieldBehavior
     ]
