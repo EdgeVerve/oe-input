@@ -77,7 +77,7 @@
         <oe-input label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
         <oe-input id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
         <button onclick="validate()">Validate!</button>
-        
+
         <oe-textarea label="mandatory textarea input" required></oe-textarea>
 
       </template>
@@ -86,9 +86,47 @@
     <h3>Inputs can have custom validator functions</h3>
     <demo-snippet>
       <template>
+        <style is="custom-style">
+          .custom-input {
+            --paper-input-container-input: {
+              border: 1px solid var(--secondary-text-color);
+              border-radius: 4px;
+              padding: 12px 8px 4px 8px;
+              box-sizing: border-box;
+            }
+            --paper-input-container-input-focus: {
+              border-bottom-color: var(--primary-color);
+            }
+            --paper-input-container-input-invalid: {
+              border-bottom-color: var(--error-color);
+            }
+            --paper-input-container-label: {
+              top: 12px;
+              left: 8px;
+            }
+            --paper-input-container-label-floating: {
+              z-index: 2;
+              top: 10px;
+              display: flex;
+            }
+            --paper-input-container-underline: {
+              display: none;
+            }
+            --paper-input-container-underline-focus: {
+              display: none;
+            }
+          }
+
+          .custom-input ::content label oe-i18n-msg,
+          .custom-input ::content label span {
+            background: #FFF;
+            padding: 0px 4px;
+          }
+
+        </style>
         <template is="dom-bind">
           <oe-input label="Custom Validator" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"></oe-input>
-          <oe-input label="Custom Validator with custom error" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase" error-message="input text should be in lower case"></oe-input>
+          <oe-input class="custom-input" label="Custom Validator with custom error" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase" error-message="input text should be in lower case"></oe-input>
         </template>
       </template>
     </demo-snippet>
@@ -106,7 +144,7 @@
         </template>
       </template>
     </demo-snippet>
-    
+
     <h3>Inputs can have prefixes and suffixes</h3>
     <demo-snippet class="horizontal">
       <template>
