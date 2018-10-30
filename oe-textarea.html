@@ -54,12 +54,12 @@ CSS Variable | Description | Default
     <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
       auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
 
-      <label hidden$="[[!label]]">
+      <label hidden$="[[!label]]" aria-hidden="true">
         <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
-        <template is="dom-if" if={{required}}><span class="required"> *</span></template>
+        <template is="dom-if" if={{required}}><span class="required" aria-hidden="true"> *</span></template>
       </label>
 
-      <iron-autogrow-textarea id="input" class="paper-input-input" bind-value="{{value}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
+      <iron-autogrow-textarea id="input" class="paper-input-input" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" bind-value="{{value}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
         autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
         required$="[[required]]" maxlength$="[[maxlength]]" autocapitalize$="[[autocapitalize]]" rows$="[[rows]]" max-rows$="[[maxRows]]"
         on-change="_onChange"></iron-autogrow-textarea>

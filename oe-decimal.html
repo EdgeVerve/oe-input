@@ -74,15 +74,15 @@ CSS Variable | Description | Default
     <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
       auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
       <content select="[prefix]"></content>
-      <label hidden$="[[!label]]">
+      <label hidden$="[[!label]]" aria-hidden="true">
             <oe-i18n-msg msgid=[[label]]>[[label]]</oe-i18n-msg>
             <template is="dom-if" if={{required}}>
-                <span class="required"> *</span>
+                <span class="required" aria-hidden="true"> *</span>
             </template>
       </label>
 
       <!--TODO : pattern, minlength,maxlength, type etc are not required. -->
-      <input is="iron-input" id="[[_inputId]]" on-change="_displayChanged" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
+      <input is="iron-input" id="[[_inputId]]" on-change="_displayChanged" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"
         invalid="{{invalid}}" prevent-invalid-input="[[preventInvalidInput]]" allowed-pattern="[[allowedPattern]]" validator="[[validator]]"
         type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]"
         inputmode$="[[inputmode]]" minlength$="[[minlength]]" maxlength$="[[maxlength]]" min$="[[min]]" max$="[[max]]" step$="[[step]]"
