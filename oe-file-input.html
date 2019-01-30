@@ -286,7 +286,7 @@ Images can be previewed before uploading.
                 Object.keys(attributes).forEach(function(attr) {
                     fd.append(attr, attributes[attr]);
                 });
-                fd.append('file', file);
+                fd.append(fileName, file);
                 xhr.upload.addEventListener("progress", function(evt) {
 
                     var percent = (evt.loaded / evt.total) * 100;
