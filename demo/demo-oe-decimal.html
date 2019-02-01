@@ -20,7 +20,13 @@
   <link rel="import" href="custom-styles.html">
   <link rel="import" href="utils.html">
   <link rel="import" href="../oe-decimal.html">
-
+  <!-- <script>
+    var OEUtils = window.OEUtils;
+    OEUtils = OEUtils || {};
+    OEUtils.componentDefaults = OEUtils.componentDefaults || {};
+    OEUtils.componentDefaults["oe-decimal-behavior"] = OEUtils.componentDefaults["oe-decimal-behavior"] || {};
+    OEUtils.componentDefaults["oe-decimal-behavior"].IntlLanguage = "en-IN";
+  </script> -->
 </head>
 
 <body unresolved>
@@ -52,7 +58,7 @@
     <h3>Validations</h3>
     <demo-snippet>
       <template>
-        <oe-decimal label="this input requires some number" required></oe-decimal>
+        <oe-decimal label="this input requires some number" required  grouping="en-IN"></oe-decimal>
         <oe-decimal field-id="amount" label="this input requires some number <= 50" required max="50"></oe-decimal>
         <oe-decimal label="this input requires some number >= 5" required min="5"></oe-decimal>
         <oe-decimal label="this input requires some number between 100 and 500" required max="500" min="100"></oe-decimal>

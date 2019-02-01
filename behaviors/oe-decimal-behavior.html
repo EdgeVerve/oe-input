@@ -83,6 +83,15 @@
         type: Boolean,
         value: false,
         observer: '_formattingChanged'
+      },
+      /**
+       * String denoting the Intl.NumberFormat to display
+       * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
+       * 
+       */
+      grouping:{
+        type:String,
+        observer: '_formattingChanged'
       }
     },
     listeners: {
@@ -124,7 +133,15 @@
       this.inputElement.bindValue = this._format(this.value);
     },
     _initialiseFormatter: function () {
-      var lLang = navigator.language || navigator.userLanguage || 'en';
+      if(!this._defaultSetting){
+        var OEUtils = window.OEUtils;
+        OEUtils = OEUtils || {};
+        OEUtils.componentDefaults = OEUtils.componentDefaults || {};
+        OEUtils.componentDefaults["oe-decimal-behavior"] = OEUtils.componentDefaults["oe-decimal-behavior"] || {};
+        this._defaultSetting = OEUtils.componentDefaults["oe-decimal-behavior"] ;
+      }
+
+      var lLang = this.grouping || this._defaultSetting.IntlLanguage || navigator.language || navigator.userLanguage || 'en';
 
       //if precision is incorrectly calculated
       if (this.precision !== undefined && isNaN(this.precision)) {
