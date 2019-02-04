@@ -89,7 +89,7 @@
        * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat
        * 
        */
-      grouping:{
+      format:{
         type:String,
         observer: '_formattingChanged'
       }
@@ -141,7 +141,7 @@
         this._defaultSetting = OEUtils.componentDefaults["oe-decimal-behavior"] ;
       }
 
-      var lLang = this.grouping || this._defaultSetting.IntlLanguage || navigator.language || navigator.userLanguage || 'en';
+      var lLang = this.format || this._defaultSetting.IntlLanguage || navigator.language || navigator.userLanguage || 'en';
 
       //if precision is incorrectly calculated
       if (this.precision !== undefined && isNaN(this.precision)) {
