@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>oe-input-masked test</title>
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+
+
+  <script type="module" src="../oe-input-masked.js"></script>
+</head>
+
+<body>
+
+  <test-fixture id="regex-mask">
+    <template>
+        <oe-input-masked mask-pattern="[\d]{4}" mask-pattern-flag="g"></oe-input-masked>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="mask-character">
+    <template>
+        <oe-input-masked mask-pattern=".*" mask-pattern-flag="g" mask-char="*"></oe-input-masked>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="append-char">
+    <template>
+        <oe-input-masked mask-pattern=".*" mask-pattern-flag="g" mask-char="*" append-char-length="5"></oe-input-masked>
+    </template>
+  </test-fixture>
+
+  <script type="module">
+    import { DomApi } from "@polymer/polymer/lib/legacy/polymer.dom";
+    import '@polymer/iron-test-helpers/mock-interactions';
+
+    function getDom(node) {
+      return new DomApi(node);
+    }
+  
+    suite('basic', function () {
+
+        var regexInput,maskInput,appendInput;
+
+        setup(function (done) {
+            regexInput = fixture('regex-mask');
+            maskInput = fixture('mask-character');
+            appendInput = fixture('append-char');
+            flush(function(){
+                done();
+            });
+        });
+
+      test('Mask input value based on regex', function (done) {
+        regexInput.set('value', 'foobar');
+        //MockInteractions.blur(regexInput.inputElement);
+        flush(function () {
+          assert.equal(regexInput.inputElement.value, 'foobar');
+          regexInput.set('value', 'foobar123f');
+          flush(function(){
+            assert.equal(regexInput.inputElement.value, 'foobar123f');
+            regexInput.fire("focus");
+            MockInteractions.keyDownOn(regexInput,8);
+            flush(function(){
+              var pressEv = MockInteractions.keyboardEventFor("keypress",'52');
+              regexInput.dispatchEvent(pressEv);
+              flush(function(){
+                regexInput.fire("change");
+                assert.equal(regexInput.invalid, false);
+                assert.equal(regexInput.inputElement.value, 'foobarXXXX');
+                done();
+              });
+            });            
+          });
+        });
+      });
+
+      test('Mask input with masked character', function (done) {        
+        maskInput.set('value', 'test');
+        flush(function () {
+          assert.equal(maskInput.inputElement.value, '****');
+          done();
+        });
+      });
+
+      test('Min/Max validation test',function(done){
+        regexInput.set('minlength',4);
+        regexInput.set('maxlength',8);
+        regexInput.set('value', 'foo');
+        regexInput.fire('change');
+        flush(function(){
+          assert.equal(regexInput.invalid, true);
+          assert.equal(regexInput.errorMessage, "tooShort");
+          regexInput.set('value', 'foobar1234');
+          regexInput.fire('change');
+          flush(function(){
+            assert.equal(regexInput.invalid, true);
+            assert.equal(regexInput.errorMessage, "tooLong");
+            //Move to first location
+            regexInput.inputElement.inputElement.selectionStart = 0;
+            regexInput.inputElement.inputElement.selectionEnd = 0;
+            MockInteractions.keyDownOn(regexInput,46);
+            MockInteractions.keyDownOn(regexInput,46);
+            flush(function(){
+              assert.equal(regexInput.inputElement.value, 'obarXXXX');
+              regexInput.validate();
+              assert.equal(regexInput.invalid, false);
+              done();
+            })
+          });
+        });
+      });
+
+      test('Append value with masked char based on append-character', function (done) {
+        appendInput.set('value', '');
+        MockInteractions.blur(appendInput.inputElement);
+        flush(function () {
+          assert.equal(appendInput.inputElement.value, '');
+          appendInput.set('value', '1');
+          MockInteractions.blur(appendInput.inputElement);
+          flush(function(){
+            assert.equal(appendInput.inputElement.value, '***********');
+            done();
+          });
+        });
+      });
+
+    });
+
+  </script>
+
+</body>
+
+</html>

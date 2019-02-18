@@ -1,29 +1,26 @@
-<!-- 
-  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
-  Bangalore, India. All Rights Reserved.
--->
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-  <title>oe-ui demo</title>
+  <title>oe-input demo</title>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../paper-styles/paper-styles.html">
-  <link rel="import" href="custom-styles.html">
-  <link rel="import" href="utils.html">
+  <script type="module">
+    import '@polymer/iron-demo-helpers/demo-pages-shared-styles';
+    import '@polymer/iron-demo-helpers/demo-snippet';
+    import '@polymer/polymer/lib/elements/dom-bind';
+    import '@polymer/polymer/lib/elements/custom-style';
+    import '@polymer/iron-icon/iron-icon';
+    import '@polymer/iron-icons/iron-icons';
+  </script>
 
-  <link rel="import" href="../oe-input.html">
-  <link rel="import" href="../oe-textarea.html">
+  <script type="module" src="../oe-input.js"></script>
 
-  <script>
+  <script type="text/javascript">
     window.OEUtils = window.OEUtils || {};
     window.OEUtils.shouldAllBeLowercase = function (value) {
       var isValid = true;
@@ -34,17 +31,26 @@
       return isValid;
     };
 
+    function validate() {
+      document.getElementById('inputForValidation').validate();
+    }
+
+    function clearInput() {
+      document.getElementById('inputWithButton').value = '';
+    }
   </script>
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </custom-style>
 </head>
 
-<body unresolved>
-
+<body>
   <div class="vertical-section-container centered">
     <h3>Inputs can have different types, and be disabled</h3>
     <demo-snippet>
       <template>
         <oe-input label="text input"></oe-input>
-        <oe-textarea label="autoresizing textarea input"></oe-textarea>
         <oe-input label="password input" type="password"></oe-input>
         <oe-input label="disabled input" disabled></oe-input>
       </template>
@@ -77,71 +83,79 @@
         <oe-input label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
         <oe-input id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
         <button onclick="validate()">Validate!</button>
-
-        <oe-textarea label="mandatory textarea input" required></oe-textarea>
-
       </template>
     </demo-snippet>
 
     <h3>Inputs can have custom validator functions</h3>
     <demo-snippet>
       <template>
-        <style is="custom-style">
-          .custom-input {
-            --paper-input-container-input: {
-              border: 1px solid var(--secondary-text-color);
-              border-radius: 4px;
-              padding: 12px 8px 4px 8px;
-              box-sizing: border-box;
-            }
-            --paper-input-container-input-focus: {
-              border-bottom-color: var(--primary-color);
-            }
-            --paper-input-container-input-invalid: {
-              border-bottom-color: var(--error-color);
-            }
-            --paper-input-container-label: {
-              top: 12px;
-              left: 8px;
-            }
-            --paper-input-container-label-floating: {
-              z-index: 2;
-              top: 10px;
-              display: flex;
-            }
-            --paper-input-container-underline: {
-              display: none;
-            }
-            --paper-input-container-underline-focus: {
-              display: none;
-            }
-          }
 
-          .custom-input ::content label oe-i18n-msg,
-          .custom-input ::content label span {
-            background: #FFF;
-            padding: 0px 4px;
-          }
+        <dom-bind>
+          <template>
+            <custom-style>
+            <style>
+              .custom-input {
+                --paper-input-container-input: {
+                  border: 1px solid var(--secondary-text-color);
+                  border-radius: 4px;
+                  padding: 12px 8px 4px 8px;
+                  box-sizing: border-box;
+                }
+                --paper-input-container-input-focus: {
+                  border-bottom-color: var(--primary-color);
+                }
+                --paper-input-container-input-invalid: {
+                  border-bottom-color: var(--error-color);
+                }
+                --paper-input-container-label: {
+                  top: 12px;
+                  left: 8px;
+                }
+                --paper-input-container-label-floating: {
+                  z-index: 2;
+                  top: 10px;
+                  display: flex;
+                }
+                --paper-input-container-underline: {
+                  display: none;
+                }
+                --paper-input-container-underline-focus: {
+                  display: none;
+                }
+                --oe-label-mixin: {
+                  background: #FFF;
+                  padding: 0px 4px;
+                  width: auto;
+                }
+                --oe-required-mixin: {
+                  color:#FF9800;
+                }
+              }
 
-        </style>
-        <template is="dom-bind">
-          <oe-input label="Custom Validator" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"></oe-input>
-          <oe-input class="custom-input" label="Custom Validator with custom error" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase" error-message="input text should be in lower case"></oe-input>
-        </template>
+            </style>
+          </custom-style>
+            <oe-input label="Custom Validator" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"></oe-input>
+            <oe-input class="custom-input" label="Custom Validator with custom error" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"
+              error-message="input text should be in lower case"></oe-input>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
     <h3>Inputs can have user-error-messages</h3>
     <demo-snippet>
       <template>
-        <template is="dom-bind">
-          <div style="padding-top:20px;">Displays user specified string error message, irrespective of error type</div>
-          <oe-input required minlength=4 user-error-message="Field is required and should have min 4 chars" label="As String" ></oe-input>
-          <div style="padding-top:20px;">Displays user specified error messages including a user specified default</div>
-          <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters", "default":"Value in field is invalid"}' label="As Object"></oe-input>
-          <div style="padding-top:20px;">Displays default error messages from framework</div>
-          <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters"}' label="As Object, no default"></oe-input>
-        </template>
+        <dom-bind>
+          <template>
+            <div style="padding-top:20px;">Displays user specified string error message, irrespective of error type</div>
+            <oe-input required minlength=4 user-error-message="Field is required and should have min 4 chars" label="As String"></oe-input>
+            <div style="padding-top:20px;">Displays user specified error messages including a user specified default</div>
+            <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters", "default":"Value in field is invalid"}'
+              label="As Object"></oe-input>
+            <div style="padding-top:20px;">Displays default error messages from framework</div>
+            <oe-input required minlength=4 user-error-message='{"tooShort":"Minimum 4 characters"}' label="As Object, no default"></oe-input>
+          </template>
+        </dom-bind>
       </template>
     </demo-snippet>
 
@@ -149,12 +163,12 @@
     <demo-snippet class="horizontal">
       <template>
         <oe-input label="total" type="number">
-          <div prefix>$</div>
+          <div slot="prefix">$</div>
         </oe-input>
         <oe-input label="username" id="inputWithButton">
-          <iron-icon icon="mail" prefix></iron-icon>
-          <div suffix>@email.com</div>
-          <paper-icon-button suffix onclick="clearInput()" icon="clear" alt="clear" title="clear">
+          <iron-icon icon="mail" slot="prefix"></iron-icon>
+          <div slot="suffix">@email.com</div>
+          <paper-icon-button slot="suffix" onclick="clearInput()" icon="clear" alt="clear" title="clear">
           </paper-icon-button>
         </oe-input>
       </template>
