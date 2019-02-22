@@ -18,7 +18,6 @@
     "@polymer/polymer": "3.1.0",
     "oe-combo": "git+http://evgit/oecloud.io/oe-combo.git#master",
     "oe-i18n-msg": "git+http://evgit/oecloud.io/oe-i18n-msg.git#master",
-    "oe-input": "git+http://evgit/oecloud.io/oe-input.git#master",
     "oe-mixins": "git+http://evgit/oecloud.io/oe-mixins.git#master",
     "oe-utils": "git+http://evgit/oecloud.io/oe-utils.git#master"
   },
