@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>oe-toggle demo</title>
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+  <script type="module">
+    import '@polymer/iron-demo-helpers/demo-pages-shared-styles'; import '@polymer/iron-demo-helpers/demo-snippet'; import '@polymer/polymer/lib/elements/dom-bind.js';
+  </script>
+
+  <script type="module" src="../oe-amount.js"></script>
+
+  <custom-style>
+    <style is="custom-style" include="demo-pages-shared-styles">
+      .vertical-section-container {
+        max-width: 600px;
+      }
+
+      #custom {
+        --custom-variable-1: lightgreen;
+
+        --custom-mixin-1:{
+          padding: 8px;
+          border: 2px dashed red;
+        };
+      }
+    </style>
+  </custom-style>
+</head>
+
+<body>
+  <div class="vertical-section-container centered">
+    <h3>Simple string-array of currencies</h3>
+    <demo-snippet>
+      <template>
+          <oe-amount ccy-list='["INR","USD","GBP"]' label="Enter Amount"></oe-amount>
+          <oe-amount required ccy-list='["INR","USD","GBP"]' label="This is required"></oe-amount>
+          <oe-amount disabled ccy-list='["INR","USD","GBP"]' label="This is disabled"></oe-amount>
+      </template>
+    </demo-snippet>
+
+    <h3>Precision can be specified</h3>
+    <demo-snippet>
+      <template>
+          <oe-amount precision=0 required ccy-list='["INR","USD","GBP"]' label="Amount Precision 0"></oe-amount>
+      </template>
+    </demo-snippet>
+    
+    <h3>Currencies as object-array</h3>
+    <demo-snippet>
+      <template>
+          <oe-amount ccy-value-field="code" ccy-display-field="symbol" ccy-list='[{"code":"USD","symbol":"$","precision":2},{"code":"INR","symbol":"₹","precision":2},{"code":"BHD","symbol":"BHD","precision":3},{"code":"JPY","symbol":"¥","precision":0}]' label="Currencies Object List"></oe-amount>
+      </template>
+    </demo-snippet>
+
+    <h3>Validations</h3>
+    <demo-snippet>
+      <template>
+          <oe-amount min="100" max="20000" ccy-value-field="code" ccy-display-field="symbol" ccy-list='[{"code":"USD","symbol":"$","precision":2},{"code":"INR","symbol":"₹","precision":2},{"code":"BHD","symbol":"BHD","precision":3},{"code":"JPY","symbol":"¥","precision":0}]' label="Min=100 Max=20000"></oe-amount>
+      </template>
+    </demo-snippet>
+    
+    <h3>Custom errors</h3>
+    <demo-snippet>
+      <template>
+          <oe-amount user-error-message="Invalid Amount" ccy-value-field="code" ccy-display-field="symbol" ccy-list='[{"code":"USD","symbol":"$","precision":2},{"code":"INR","symbol":"₹","precision":2},{"code":"BHD","symbol":"BHD","precision":3},{"code":"JPY","symbol":"¥","precision":0}]' label="Custom error"></oe-amount>
+          <oe-amount ccy-error-message="Currency is invalid" ccy-value-field="code" ccy-display-field="symbol" ccy-list='[{"code":"USD","symbol":"$","precision":2},{"code":"INR","symbol":"₹","precision":2},{"code":"BHD","symbol":"BHD","precision":3},{"code":"JPY","symbol":"¥","precision":0}]' label="Custom error for currency field"></oe-amount>
+          <oe-amount amt-error-message="Value is invalid" ccy-value-field="code" ccy-display-field="symbol" ccy-list='[{"code":"USD","symbol":"$","precision":2},{"code":"INR","symbol":"₹","precision":2},{"code":"BHD","symbol":"BHD","precision":3},{"code":"JPY","symbol":"¥","precision":0}]' label="Custom error for value field"></oe-amount>
+      </template>
+    </demo-snippet>
+  </div>
+</body>
+
+</html>

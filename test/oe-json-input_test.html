@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>oe-json-input test</title>
+
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+
+
+    <script type="module" src="../oe-json-input.js"></script>
+
+    <script>
+        var OEUtils = OEUtils || {};
+    </script>
+</head>
+
+<body>
+
+    <test-fixture id="basic">
+        <template>
+            <oe-json-input></oe-json-input>
+        </template>
+    </test-fixture>
+
+    <test-fixture id="with-value">
+        <template>
+            <oe-json-input value='{"age":6}'></oe-json-input>
+        </template>
+    </test-fixture>
+
+
+    <test-fixture id="with-invalid-value">
+        <template>
+            <oe-json-input value='{age:6}'></oe-json-input>
+        </template>
+    </test-fixture>
+
+
+    <script type="module">
+        import {
+            DomApi
+        } from "@polymer/polymer/lib/legacy/polymer.dom";
+        import '@polymer/iron-test-helpers/mock-interactions';
+
+        function getDom(node) {
+            return new DomApi(node);
+        }
+
+        suite('<oe-json-input>', function () {
+
+            test('parses value and sets object', function (done) {
+                var el = fixture('with-value');
+                flush(function(){
+                    expect(el.invalid).to.not.equal(true);
+                    expect(el.errorMessage).to.not.exist;
+                    expect(el.value).to.deep.equal({
+                        age: 6
+                    });
+                    done();
+                });
+                
+            });
+
+            test('sets error on initial parse', function (done) {
+                var el = fixture('with-invalid-value');
+                flush(function(){
+                    expect(el.invalid).to.equal(true);
+                    expect(el.errorMessage).to.exist;
+                    expect(el.value).to.equal(null);
+                    expect(el.displayValue).to.equal('{age:6}');
+                    done();
+                });
+                
+            });
+
+            test('Setting value updates the display', function (done) {
+                var data = {
+                    name: 'rohit'
+                };
+                var el = fixture('basic');
+                el.set('value', data);
+                flush(function(){
+                    expect(el.displayValue).to.equal(JSON.stringify(data, undefined, 2));
+                    done();
+                });
+            });
+
+            test('changing input updates the value and display', function (done) {
+
+                var text = '{"name":"rohit"}';
+                var data = JSON.parse(text);
+
+                var el = fixture('basic');
+                el.set('displayValue', text);
+
+                el.$.input.fire('change');
+                flush(function(){
+                    expect(el.displayValue).to.equal(JSON.stringify(data, undefined, 2));
+                    expect(el.value).to.deep.equal(data);
+                    done();
+                });
+                
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,131 +1,127 @@
-<!-- 
-  ©2016-2017 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
-  Bangalore, India. All Rights Reserved.
--->
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>oe-ui demo</title>
+    <title>oe-file-input demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../paper-styles/paper-styles.html">
-    <link rel="import" href="custom-styles.html">
-    <link rel="import" href="utils.html">
-    <link rel="import" href="../../paper-progress/paper-progress.html">
-    <link rel="import" href="../oe-file-input.html">
-
+    <script type="module">
+        import '@polymer/iron-demo-helpers/demo-pages-shared-styles'; 
+        import '@polymer/polymer/lib/elements/custom-style'; 
+        import '@polymer/polymer/lib/elements/dom-bind'; 
+        import '@polymer/paper-styles/paper-styles'; 
+        import '@polymer/paper-progress/paper-progress';
+        import '@polymer/iron-demo-helpers/demo-snippet'; 
+        import '@polymer/iron-icon/iron-icon'; 
+        import '@polymer/iron-icons/iron-icons';
+        import '@polymer/paper-icon-button/paper-icon-button';
+        import '@polymer/iron-flex-layout/iron-flex-layout-classes';
+    </script>
+    <script type="module" src="../oe-file-input.js"></script>
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </custom-style>
+    
 </head>
 
-<body unresolved>
+<body>
     <div class="vertical-section-container centered">
         <h3>File Input</h3>
         <demo-snippet>
             <template>
-        <oe-file-input value-type="stream"></oe-file-input>
-      </template>
+                <oe-file-input value-type="stream"></oe-file-input>
+            </template>
         </demo-snippet>
 
         <h3>With Upload button</h3>
         <demo-snippet>
             <template>
-          <oe-file-input value-type="stream" post-url="....."></oe-file-input>
-      </template>
+                <oe-file-input value-type="stream" post-url="....."></oe-file-input>
+            </template>
         </demo-snippet>
 
         <h3>Multiple Files</h3>
         <demo-snippet>
             <template>
-        <oe-file-input multiple value-type="stream"></oe-file-input>
-      </template>
+                <oe-file-input multiple value-type="stream"></oe-file-input>
+            </template>
         </demo-snippet>
 
         <h3>Custom File upload with individual upload</h3>
         <demo-snippet>
             <template>
-        <oe-file-input multiple value-type="stream" post-url="api/containers/12823424/upload" >
-                <template custom-upload>        
-                 
-            <div style="border: 1px dotted;height: 150px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
-                <div style="padding:10px;">
-                    <iron-icon icon="icons:file-upload"></iron-icon>
-                </div>
-                <div style="padding:10px;"><span style="padding-left: 6px;">drop files here or</span> </div>
-                <div style="padding:10px;">
-                    <paper-button on-tap="_selectFile" raised>
-                        Choose or drop files
-                    </div></paper-button>
-                </div>
-            </div>
-            <div>
-              
-            </div>
-            <template is="dom-repeat" items={{listToArray(files)}}>
-                    <div>
-                <label>{{item.name}}</label> 
-                <paper-icon-button icon="file-upload" on-tap="uploadFiles"></paper-icon-button>
-                <paper-icon-button icon="cancel" on-tap="abortFileUpload"></paper-icon-button>
-                 
-                </div> 
-               
-              </template>
-
-
-
-            </template>
-            </oe-file-input>
+                <oe-file-input multiple value-type="stream" post-url="api/containers/12823424/upload">
+                    <template custom-upload>
+                        <div style="border: 1px dotted;height: 150px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical"
+                            on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
+                            <div style="padding:10px;">
+                                <iron-icon icon="icons:file-upload"></iron-icon>
+                            </div>
+                            <div style="padding:10px;">
+                                <span style="padding-left: 6px;">drop files here or</span>
+                            </div>
+                            <div style="padding:10px;">
+                                <paper-button on-tap="_selectFile" raised>
+                                    Choose or drop files
+                                </paper-button>
+                            </div>
+                        </div>
+                        <template is="dom-repeat" items={{listToArray(files)}}>
+                            <div>
+                                <label>{{item.name}}</label>
+                                <paper-icon-button icon="file-upload" on-tap="uploadFiles"></paper-icon-button>
+                                <paper-icon-button icon="cancel" on-tap="abortFileUpload"></paper-icon-button>
+                            </div>
+                        </template>
+                    </template>
+                </oe-file-input>
             </template>
         </demo-snippet>
+
         <h3>Custom File upload with bulk upload</h3>
         <demo-snippet>
             <template>
-        <oe-file-input isbulk-upload multiple value-type="stream" post-url="api/containers/12823424/upload" >
-                <template custom-upload>        
-                 
-            <div style="border: 1px dotted;height: 185px;align-items: center;    width: 150px;" id="dropArea" class="layout vertical" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
-                <div style="padding:10px;">
-                    <iron-icon icon="icons:file-upload"></iron-icon>
-                </div>
-                <div style="padding:10px;"><span style="padding-left: 6px;">drop files here or</span> </div>
-                <div style="padding:10px;">
-                    <paper-button on-tap="_selectFile" raised>
-                        Choose or drop files
-                    </div></paper-button>
-                    <paper-button  on-tap="uploadFiles">upload</paper-icon-button>
-                    <paper-button icon="cancel" on-tap="abortFileUpload">Cancel</paper-icon-button>
-                </div>
-            </div>
- 
-            <template is="dom-repeat" items={{listToArray(files)}}>
-                    <div>
-                <label>{{item.name}}</label> 
-                
-                 
-                </div> 
-               
-              </template>
-
-
-
-            </template>
-            </oe-file-input>
+                <oe-file-input isbulk-upload multiple value-type="stream" post-url="api/containers/12823424/upload">
+                    <template custom-upload>
+                        <div class="layout horizontal">
+                            <div class="layout vertical center justified" style="padding:10px;border: 1px dotted;min-height: 185px;width: 150px;" id="dropArea" on-dragenter="dragEnterOver" on-dragover="dragEnterOver" on-drop="drop">
+                                <iron-icon icon="icons:file-upload"></iron-icon>
+                                <span style="padding: 6px;">drag n drop files here</span>
+                                <paper-button on-tap="_selectFile" raised>
+                                    Choose file
+                                </paper-button>
+                            </div>
+                            <div class="layout vertical" hidden=[[!value]]>
+                                <h4>Files</h4>
+                                <ul>
+                                    <template is="dom-repeat" items={{listToArray(files)}}>
+                                        <li>[[item.name]]</li>
+                                    </template>
+                                </ul>
+                                <div hidden=[[!_enableUpload]] class="layout horizontal justified">
+                                        <paper-button on-tap="uploadFiles">upload</paper-button>
+                                        <paper-button on-tap="abortFileUpload">Cancel</paper-button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </oe-file-input>
             </template>
         </demo-snippet>
 
         <h3>Accept only pdf Files</h3>
         <demo-snippet>
             <template>
-        <oe-file-input accept="application/pdf" value-type="stream"></oe-file-input>
-      </template>
+                <oe-file-input accept="application/pdf" value-type="stream"></oe-file-input>
+            </template>
         </demo-snippet>
     </div>
+
 </body>
 
 </html>

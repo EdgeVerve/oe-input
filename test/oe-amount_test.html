@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>oe-amount test</title>
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+
+  <script>
+    var ccyStrList = ['USD', 'INR', 'GBP'];
+    var ccyObjList = [{ code: 'USD', symbol: '$', precision: 2 }, { code: 'INR', symbol: '₹', precision: 2 }, { code: 'BHD', symbol: 'BHD', precision: 3 }, { code: 'JPY', symbol: '¥', precision: 0 }];
+  </script>
+  <script type="module" src="../oe-amount.js"></script>
+</head>
+
+<body>
+  <test-fixture id="amount">
+    <template>
+      <oe-amount label="Loan Amount"></oe-amount>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="amount_req">
+    <template>
+      <oe-amount required precision=3 max="1000000" min="100" label="Loan Amount"></oe-amount>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="amount_req_def">
+    <template>
+      <oe-amount required label="Loan Amount" default-ccy="INR"></oe-amount>
+    </template>
+  </test-fixture>
+
+  <script type="module">
+    import '@polymer/iron-test-helpers/mock-interactions';
+    suite('Amount with currencies as string-array:', function () {
+      var el;
+      var el_req;
+      var el_req_def;
+      setup(function (done) {
+        el = fixture('amount');
+        el_req = fixture('amount_req');
+        el_req_def = fixture('amount_req_def');
+        flush(function () {
+          el.set('ccyList', ccyStrList);
+          el_req.set('ccyList', ccyStrList);
+          el_req_def.set('ccyList', ccyStrList);
+          done();
+        });
+      });
+
+      test('Does not default a currency when field is non-mandatory', function () {
+        expect(el.currency).to.be.undefined;
+        expect(el.selectedCurrency).to.be.undefined;
+        expect(el.value).to.be.undefined;
+      });
+      test('Sets first currency in list as default when field is mandatory', function () {
+        expect(el_req.currency).to.equal('USD');
+        expect(el_req.selectedCurrency).to.equal('USD');
+        expect(el_req.value).to.be.ok;
+        expect(el_req.value.currency).to.equal('USD');
+      });
+      test('Sets specified default-currency as default when field is mandatory', function () {
+        expect(el_req_def.currency).to.equal('INR');
+        expect(el_req_def.selectedCurrency).to.equal('INR');
+        expect(el_req_def.value).to.be.ok;
+        expect(el_req_def.value.currency).to.equal('INR');
+      });
+      test('Default precision is used', function (done) {
+        el.$.amt.inputElement.set('bindValue', '1234.5678');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.value.amount).to.equal(1234.57);
+          done();
+        });
+      });
+
+      test('Specified precision is used', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '1234.5678');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el_req.value.amount).to.equal(1234.568);
+          done();
+        });
+      });
+
+      test('Setting value reflects in controls', function (done) {
+        el.set('value', { currency: 'GBP', amount: 12345.67 });
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('12,345.67');
+          expect(el.$.ccy.inputElement.value).to.equal('GBP');
+          done();
+        });
+      });
+
+      test('formats the amount', function (done) {
+        el.$.amt.inputElement.set('bindValue', '123465.78');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('123,465.78');
+          done();
+        });
+      });
+
+      test('expands amount shorthands', function (done) {
+        el.$.amt.inputElement.set('bindValue', '13.56m');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('13,560,000.00');
+          expect(el.value.amount).to.equal(13560000.00);
+          done();
+        });
+      });
+
+      test('Shows error when invalid amount is entered', function (done) {
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('numberFormat');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('Shows error when invalid currency is entered', function (done) {
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('invalidValue');
+          done();
+        });
+      });
+
+      test('triggers min validation', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '10');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el_req.errorMessage).to.equal('rangeUnderflow');
+          expect(el_req.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('triggers max validation', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '1.00001m');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el_req.errorMessage).to.equal('rangeOverflow');
+          expect(el_req.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('shows custom error for amount', function (done) {
+        el.set('userErrorMessage', 'my-custom-error');
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('my-custom-error');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+
+
+      test('shows amount specific custom error for amount', function (done) {
+        el.set('amtErrorMessage', 'my-custom-amt-error');
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('my-custom-amt-error');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('Shows custom error for currency', function (done) {
+        el.set('userErrorMessage', 'my-custom-error');
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('my-custom-error');
+          done();
+        });
+      });
+
+      test('Shows ccy specific custom error for currency', function (done) {
+        el.set('ccyErrorMessage', 'my-custom-ccy-error');
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('my-custom-ccy-error');
+          done();
+        });
+      });
+    });
+
+    suite('Amount with currencies as object-array:', function () {
+      var el;
+      var el_req;
+      var el_req_def;
+      setup(function (done) {
+        el = fixture('amount');
+        el_req = fixture('amount_req');
+        el_req_def = fixture('amount_req_def');
+        flush(function () {
+          el.set('ccyDisplayField', 'symbol');
+          el.set('ccyValueField', 'code');
+          el_req.set('ccyDisplayField', 'symbol');
+          el_req.set('ccyValueField', 'code');
+          el_req_def.set('ccyDisplayField', 'symbol');
+          el_req_def.set('ccyValueField', 'code');
+
+          el.set('ccyList', ccyObjList);
+          el_req.set('ccyList', ccyObjList);
+          el_req_def.set('ccyList', ccyObjList);
+          done();
+        });
+      });
+
+      test('Does not default a currency when field is non-mandatory', function () {
+        expect(el.currency).to.be.undefined;
+        expect(el.selectedCurrency).to.be.undefined;
+        expect(el.value).to.be.undefined;
+      });
+      test('Sets first currency in list as default when field is mandatory', function () {
+        var expected = ccyObjList[0];
+        expect(el_req.currency).to.equal(expected.code);
+        expect(el_req.selectedCurrency).to.equal(expected);
+        expect(el_req.value).to.be.ok;
+        expect(el_req.value.currency).to.equal(expected.code);
+      });
+      test('Sets specified default-currency as default when field is mandatory', function () {
+        var expected = ccyObjList[1];
+        expect(el_req_def.currency).to.equal(expected.code);
+        expect(el_req_def.selectedCurrency).to.equal(expected);
+        expect(el_req_def.value).to.be.ok;
+        expect(el_req_def.value.currency).to.equal(expected.code);
+      });
+      test('Default precision is used', function (done) {
+        el.$.amt.inputElement.set('bindValue', '1234.5678');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.value.amount).to.equal(1234.57);
+          done();
+        });
+      });
+
+      test('Currency precision overrides specified precision', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '1234.5678');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el_req.value.amount).to.equal(1234.57);
+          done();
+        });
+      });
+
+      test('Setting value reflects in controls', function (done) {
+        el.set('value', { currency: 'INR', amount: 12345.67 });
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('12,345.67');
+          expect(el.$.ccy.inputElement.value).to.equal(ccyObjList[1].symbol);
+          expect(el.selectedCurrency).to.equal(ccyObjList[1]);
+          done();
+        });
+      });
+
+      test('formats the amount based on precision', function (done) {
+        el.set('currency', 'JPY');
+        flush(function () {
+          expect(el.$.amt.precision).to.equal(0);
+          el.$.amt.inputElement.set('bindValue', '123456.78');
+          el.$.amt.inputElement.fire('change');
+
+          flush(function () {
+            expect(el.$.amt.inputElement.value).to.equal('123,457');
+            expect(el.value).to.deep.equal({ currency: 'JPY', amount: 123457 });
+            done();
+          });
+        });
+      });
+
+      test('expands amount shorthands for currency', function (done) {
+        el.$.amt.inputElement.set('bindValue', '13.56m');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('13,560,000.00');
+          expect(el.value.amount).to.equal(13560000.00);
+          done();
+        });
+      });
+
+      test('Shows error when invalid amount is entered', function (done) {
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('numberFormat');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('Shows error when invalid currency is entered', function (done) {
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('invalidValue');
+          done();
+        });
+      });
+
+      test('triggers min validation', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '10');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el_req.errorMessage).to.equal('rangeUnderflow');
+          expect(el_req.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('triggers max validation', function (done) {
+        el_req.$.amt.inputElement.set('bindValue', '1.00001m');
+        el_req.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el_req.errorMessage).to.equal('rangeOverflow');
+          expect(el_req.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('shows custom error for amount', function (done) {
+        el.set('userErrorMessage', 'my-custom-error');
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('my-custom-error');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('shows custom error for amount', function (done) {
+        el.set('userErrorMessage', 'my-custom-error');
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('my-custom-error');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('shows amount specific custom error for amount', function (done) {
+        el.set('amtErrorMessage', 'my-custom-amt-error');
+        el.$.amt.inputElement.set('bindValue', 'foobar');
+        el.$.amt.inputElement.fire('change');
+        flush(function () {
+          expect(el.amount).to.be.undefined;
+          expect(el.errorMessage).to.equal('my-custom-amt-error');
+          expect(el.invalid).to.be.true;
+          done();
+        });
+      });
+
+      test('Shows custom error for currency', function (done) {
+        el.set('userErrorMessage', 'my-custom-error');
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('my-custom-error');
+          done();
+        });
+      });
+
+      test('Shows ccy specific custom error for currency', function (done) {
+        el.set('ccyErrorMessage', 'my-custom-ccy-error');
+        var input = el.$.ccy.inputElement;
+        input.bindValue = 'F';
+        MockInteractions.keyUpOn(input, input.bindValue.charCodeAt(0));
+        input.fire('change');
+        flush(function () {
+          expect(el.currency).to.be.undefined;
+          expect(el.invalid).to.be.true;
+          expect(el.errorMessage).to.equal('my-custom-ccy-error');
+          done();
+        });
+      });
+
+
+      test('Setting value to undefined clears the component', function (done) {
+        el.set('value', { currency: 'INR', amount: 12345.67 });
+        flush(function () {
+          expect(el.$.amt.inputElement.value).to.equal('12,345.67');
+          expect(el.$.ccy.inputElement.value).to.equal(ccyObjList[1].symbol);
+          expect(el.selectedCurrency).to.equal(ccyObjList[1]);
+          el.set('value', undefined);
+          flush(function () {
+            expect(el.$.amt.inputElement.value).to.equal('');
+            expect(el.$.ccy.inputElement.value).to.equal('');
+            expect(el.amount).to.be.undefined;
+            expect(el.currency).to.be.undefined;
+            expect(el.selectedCurrency).to.be.undefined;
+            done();
+          });
+        });
+      });
+
+      test('Currency is reset as undefined when currency-list is undefined', function () {
+        expect(el_req.currency).to.equal(ccyObjList[0].code);
+        el_req.set('ccyList', undefined);
+        expect(el_req.currency).to.be.undefined;
+      });
+
+      test('When ccy-list changes, New settings are applied for selected currency', function () {
+        var newList = [{ code: 'USD', precision: 4, symbol: 'USD' }, { code: 'INR', precision: 3, symbol: 'INR' }]
+
+        var inr = ccyObjList.find(function (i) {
+          return i.code === 'INR';
+        });
+        el.set('currency', 'INR');
+        expect(el.selectedCurrency).to.equal(inr);
+        expect(el.$.amt.precision).to.equal(inr.precision);
+        expect(el.$.ccy.inputElement.value).to.equal(inr.symbol);
+        el.set('ccyList', newList);
+
+        expect(el.$.amt.precision).to.equal(3);
+        expect(el.$.ccy.inputElement.value).to.equal('INR');
+        expect(el.selectedCurrency).to.equal(newList[1]);
+      });
+
+      test('When ccy-list changes and existing ccy is not part of it, error is raised', function () {
+        var newList = [{ code: 'USD', precision: 4, symbol: 'USD' }]
+        var inr = ccyObjList.find(function (i) {
+          return i.code === 'INR';
+        });
+        el.set('currency', 'INR');
+        expect(el.selectedCurrency).to.equal(inr);
+        el.set('ccyList', newList);
+        expect(el.invalid).to.be.true;
+        expect(el.errorMessage).to.equal('invalidCurrency');
+      });
+
+
+      test('Empty field validation causes no error', function () {
+        expect(el.invalid).to.be.false;
+        el.validate();
+        expect(el.invalid).to.be.false;
+        expect(el.errorMessage).to.be.undefined;
+      });
+
+      test('If only currency is set, field causes error', function () {
+        el.validate();
+        expect(el.invalid).to.be.false;
+        el.set('currency', 'INR');
+        el.validate();
+        expect(el.invalid).to.be.true;
+        expect(el.errorMessage).to.equal('amountMissing');
+      });
+      test('If only amount is set, field causes error', function () {
+        el.validate();
+        expect(el.invalid).to.be.false;
+        el.set('amount', 100000);
+        el.validate();
+        expect(el.invalid).to.be.true;
+        expect(el.errorMessage).to.equal('currencyMissing');
+      });
+
+      test('Required field causes validation error', function () {
+        el_req.set('currency', undefined);
+        expect(el_req.invalid).to.be.false;
+        el_req.validate();
+        expect(el_req.invalid).to.be.true;
+        expect(el_req.errorMessage).to.equal('valueMissing');
+      });
+
+      test('When currency & amount both are missing, value goes back as undefined', function () {
+        el.set('currency', 'INR');
+        expect(el.value).to.be.ok;
+        el.set('currency', '');
+        expect(el.value).to.be.undefined;
+
+        el.set('amount', 10000);
+        expect(el.value).to.be.ok;
+        el.set('amount', undefined);
+        expect(el.value).to.be.undefined;
+      });
+
+    });
+
+  </script>
+</body>
+
+</html>

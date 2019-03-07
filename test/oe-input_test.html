@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>oe-input test</title>
+
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+  <script src="../node_modules/chai/chai.js"></script>
+  <script src="../node_modules/mocha/mocha.js"></script>
+  <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+  <!-- <script src="../node_modules/@polymer/iron-test-helpers/mock-interactions.js"></script> -->
+
+  <script type="module" src="../oe-input.js"></script>
+  <script type="module" src="letters-only.js"></script>
+  <script>
+    var OEUtils = OEUtils || {};
+    OEUtils.customValidatorFunc = function (value) {
+      var isValid = !value || (value.length == 4 && value[0] === 'A') || (value.length == 6 && value[0] === 'B');
+      if (!isValid) {
+        this.setValidity(false, 'custom-validation-failed');
+      }
+      return isValid;
+    };
+
+  </script>
+</head>
+
+<body>
+
+  <test-fixture id="basic">
+    <template>
+      <oe-input></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="has-tabindex">
+    <template>
+      <oe-input tabindex="0"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="my-label-input">
+    <template>
+      <oe-input label="foo"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="label-has-value">
+    <template>
+      <oe-input label="foo" value="bar"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="error">
+    <template>
+      <oe-input auto-validate pattern="[0-9]*" value="foobar" error-message="error"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="required">
+    <template>
+      <oe-input auto-validate required></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="required-no-auto-validate">
+    <template>
+      <oe-input required></oe-input>
+    </template>
+  </test-fixture>
+
+
+  <test-fixture id="required-char-counter">
+    <template>
+      <oe-input auto-validate char-counter required error-message="error"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="char-counter">
+    <template>
+      <oe-input char-counter value="foobar"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="always-float-label">
+    <template>
+      <oe-input always-float-label label="foo"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="placeholder">
+    <template>
+      <oe-input label="foo" placeholder="bar"></oe-input>
+    </template>
+  </test-fixture>
+
+  <letters-only></letters-only>
+
+  <test-fixture id="validator">
+    <template>
+      <oe-input value="123123" validator="letters-only" auto-validate></oe-input>
+    </template>
+  </test-fixture>
+
+
+  <test-fixture id="pattern">
+    <template>
+      <oe-input pattern="[a-zA-Z]*"></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="min10">
+    <template>
+      <oe-input minlength=10></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="max5">
+    <template>
+      <oe-input maxlength=5></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="min4max8">
+    <template>
+      <oe-input minlength=4 maxlength=8></oe-input>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="custom">
+    <template>
+      <oe-input validation-function="OEUtils.customValidatorFunc"></oe-input>
+    </template>
+  </test-fixture>
+
+
+  <script type="module">
+    import { DomApi } from "@polymer/polymer/lib/legacy/polymer.dom";
+    import '@polymer/iron-test-helpers/mock-interactions';
+
+    function getDom(node) {
+      return new DomApi(node);
+    }
+  
+    suite('basic', function () {
+
+  
+      test('setting value sets the input value', function (done) {
+        var input = fixture('basic');
+        input.set('value', 'foobar');
+        flush(function () {
+          assert.equal(input.inputElement.value, input.value, 'inputElement.value equals input.value');
+          done();
+        });
+      });
+
+      test('placeholder does not overlap label', function (done) {
+        var input = fixture('placeholder');
+        flush(function(){
+          assert.equal(input.inputElement.inputElement.placeholder, input.placeholder,
+          'inputElement.placeholder equals input.placeholder');
+          assert.equal(input.noLabelFloat, false);
+          var floatingLabel = getDom(getDom(input.root).querySelector('paper-input-container').root).querySelector(
+            '.label-is-floating');
+          assert.ok(floatingLabel);
+          done();
+        });
+      });
+
+      test('always-float-label attribute works without placeholder', function () {
+        var input = fixture('always-float-label');
+        var container = getDom(input.root).querySelector('paper-input-container');
+        var inputContent = getDom(container.root).querySelector('.input-content');
+        assert.isTrue(inputContent.classList.contains('label-is-floating'), 'label is floating');
+      });
+
+      test('error message is displayed', function (done) {
+        var input = fixture('error');
+        flush(function () {
+          var error = getDom(input.root).querySelector('paper-input-error');
+          assert.ok(error, 'paper-input-error exists');
+          assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+          done();
+        });
+      });
+
+      test('empty required input shows error', function (done) {
+        var input = fixture('required');
+        flush(function(){
+            input.validate();
+            flush(function () {
+              var error = getDom(input.root).querySelector('paper-input-error');
+              assert.ok(error, 'paper-input-error exists');
+              assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+              done();
+            });
+        });
+      });
+        
+
+      test('character counter is displayed', function (done) {
+        var input = fixture('char-counter');
+        flush(function () {
+          var counter = getDom(input.root).querySelector('paper-input-char-counter')
+          assert.ok(counter, 'paper-input-char-counter exists');
+          assert.equal(counter._charCounterStr, input.value.length, 'character counter shows the value length');
+          done();
+        });
+      });
+
+      test('validator is used', function (done) {
+        var input = fixture('validator');
+        flush(function(){
+          assert.ok(input.inputElement.invalid, 'input is invalid');
+          done();
+        })
+      });
+
+      test('caret position is preserved', function (done) {
+        var input = fixture('basic');
+        flush(function(){
+          var ironInput = input.inputElement;
+          input.value = 'nananana';
+          ironInput.selectionStart = 2;
+          ironInput.selectionEnd = 2;
+          input.updateValueAndPreserveCaret('nanananabatman');
+          flush(function(){
+            assert.equal(ironInput.selectionStart, 2, 'selectionStart is preserved');
+            assert.equal(ironInput.selectionEnd, 2, 'selectionEnd is preserved');
+            done();
+          });
+        });
+      });
+
+    });
+
+    suite('focus/blur events', function () {
+      var input;
+
+      setup(function () {
+        input = fixture('basic');
+      });
+
+      test('focus/blur events fired on host element', function () {
+        var nFocusEvents = 0;
+        var nBlurEvents = 0;
+        var eFocus = function (event) { // eslint-disable-line no-unused-vars
+          assert(input.focused, 'input is focused');
+          nFocusEvents += 1;
+          MockInteractions.blur(input.inputElement);
+          input.removeEventListener('focus', eFocus);
+        };
+        var eBlur = function () {
+          nBlurEvents += 1;
+          assert(!input.focused, 'input is blurred');
+          input.removeEventListener('blur', eBlur);
+        };
+        input.addEventListener('focus', eFocus);
+        input.addEventListener('blur', eBlur);
+        MockInteractions.focus(input.inputElement);
+        assert.isTrue(nFocusEvents >= 1, 'focus event fired');
+        assert.isTrue(nBlurEvents >= 1, 'blur event fired');
+      });
+
+    });
+
+    suite('focused styling (integration test)', function () {
+
+      test('underline is colored when input is focused', function (done) {
+        var input = fixture('basic');
+        var container = getDom(input.root).querySelector('paper-input-container');
+        var line = getDom(container.root).querySelector('.underline');
+        assert.isFalse(line.classList.contains('is-highlighted'),
+          'line is not highlighted when input is not focused');
+        MockInteractions.focus(input.inputElement);
+        requestAnimationFrame(function () {
+          assert.isTrue(line.classList.contains('is-highlighted'),
+            'line is highlighted when input is focused');
+          done();
+        });
+      });
+
+    });
+
+    suite('validation', function () {
+
+      test('for required element, invalid and errorMessage should not be set by default', function (done) {
+        var input = fixture('required');
+         flush(function(){
+            assert.isFalse(input.invalid, 'invalid is false');
+            assert.isUndefined(input.errorMessage, 'errorMessage is undefined');
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.isFalse(error.invalid, 'invalid is false');
+            assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is undefined');
+            done();
+          });
+      });
+
+      test('invalid attribute updated after calling validate()', function (done) {
+        var input = fixture('required-no-auto-validate');
+
+        flush(function () {
+          input.validate();
+          var error = getDom(input.root).querySelector('paper-input-error');
+          assert.ok(error, 'paper-input-error exists');
+          assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+          assert.isTrue(input.invalid, 'invalid is true');
+          assert.equal(input.errorMessage, 'valueMissing');
+          done();
+        });
+      });
+
+      test('invalid attribute updated for required field', function (done) {
+        var input = fixture('required');
+        flush(function(){
+          input.validate();
+          flush(function () {
+          
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+            assert.isTrue(error.invalid, 'invalid is true');
+            assert.equal(input.$['i18n-error'].msgid, 'valueMissing');
+
+            assert.isTrue(input.invalid, 'invalid is true');
+            assert.equal(input.errorMessage, 'valueMissing');
+
+            MockInteractions.focus(input.inputElement);
+            input.set('value', 'Lorem Ipsum');
+            input.inputElement.fire('change');
+            MockInteractions.blur(input.inputElement);
+
+            flush(function () {
+              assert.isFalse(input.invalid, 'invalid is false');
+              assert.isUndefined(input.errorMessage, 'errorMessage is not defined');
+              assert.isFalse(error.invalid, 'invalid is false');
+              assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+              done();
+            });
+          });
+        })
+       
+      });
+
+      test('patternMismatch Error, if input is not in proper format', function (done) {
+        var input = fixture('pattern');
+        flush(function () {
+          MockInteractions.focus(input.inputElement);
+          input.set('value', '43kksd');
+          input.fire('change');
+          MockInteractions.blur(input.inputElement);
+
+          flush(function () {
+            //input.validate();
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+
+            assert.isTrue(error.invalid, 'invalid is true');
+            assert.equal(input.$['i18n-error'].msgid, 'patternMismatch');
+            assert.isTrue(input.invalid, 'invalid is true');
+            assert.equal(input.errorMessage, 'patternMismatch');
+
+            MockInteractions.focus(input.inputElement);
+            input.set('value', 'foobar');
+            input.fire('change');
+            MockInteractions.blur(input.inputElement);
+
+            flush(function () {
+              assert.isFalse(input.invalid, 'invalid is false');
+              assert.isUndefined(input.errorMessage, 'errorMessage is not defined');
+              assert.isFalse(error.invalid, 'invalid is false');
+              assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+              done();
+            });
+          });
+        });
+
+      });
+
+      test('tooShort Error, if input is less than minlength', function (done) {
+        var input = fixture('min10');
+        flush(function () {
+          MockInteractions.focus(input.inputElement);
+          input.set('value', 'foobar');
+          flush(function(){
+            input.fire('change');
+            MockInteractions.blur(input.inputElement);
+
+            flush(function () {
+              var error = getDom(input.root).querySelector('paper-input-error');
+              assert.ok(error, 'paper-input-error exists');
+              assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+              assert.isTrue(error.invalid, 'invalid is true');
+              assert.equal(input.$['i18n-error'].msgid, 'tooShort');
+
+              assert.isTrue(input.invalid, 'invalid is true');
+              assert.equal(input.errorMessage, 'tooShort');
+
+
+              /* MIN Boundary Case*/
+              MockInteractions.focus(input.inputElement);
+              input.set('value', 'foobar1234');
+              input.fire('change');
+              MockInteractions.blur(input.inputElement);
+
+              flush(function () {
+                assert.isFalse(input.invalid, 'Boundary Case, invalid is false');
+                assert.isUndefined(input.errorMessage, 'Boundary Case, errorMessage is not defined');
+                assert.isFalse(error.invalid, 'Boundary Case, invalid is false');
+                assert.isUndefined(input.$['i18n-error'].msgid, 'Boundary Case, errorMessage is not defined');
+
+                /* MIN Valid Value */
+                MockInteractions.focus(input.inputElement);
+                input.set('value', 'football is fun');
+                input.fire('change');
+                MockInteractions.blur(input.inputElement);
+
+                flush(function () {
+                  assert.isFalse(input.invalid, 'invalid is false');
+                  assert.isUndefined(input.errorMessage, 'errorMessage is not defined');
+                  assert.isFalse(error.invalid, 'invalid is false');
+                  assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+                  done();
+                });
+              });
+            });
+          });
+         
+        });
+
+      });
+
+      test('tooLong Error, if input is more than max', function (done) {
+        var input = fixture('max5');
+        flush(function () {
+          MockInteractions.focus(input.inputElement);
+          input.set('value', 'cricket is boring');
+          input.fire('change');
+          MockInteractions.blur(input.inputElement);
+
+          flush(function () {
+            //input.validate();
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+            assert.isTrue(error.invalid, 'invalid is true');
+            assert.equal(input.$['i18n-error'].msgid, 'tooLong');
+
+            assert.isTrue(input.invalid, 'invalid is true');
+            assert.equal(input.errorMessage, 'tooLong');
+
+
+            /* MAX Boundary Case*/
+            MockInteractions.focus(input.inputElement);
+            input.set('value', 'just5');
+            input.fire('change');
+            MockInteractions.blur(input.inputElement);
+
+            flush(function () {
+              assert.isFalse(input.invalid, 'Boundary Case, invalid is false');
+              assert.isUndefined(input.errorMessage, 'Boundary Case, errorMessage is not defined');
+              assert.isFalse(error.invalid, 'Boundary Case, invalid is false');
+              assert.isUndefined(input.$['i18n-error'].msgid, 'Boundary Case, errorMessage is not defined');
+
+              /* MAX Valid Value */
+              MockInteractions.focus(input.inputElement);
+              input.set('value', 'good');
+              input.fire('change');
+              MockInteractions.blur(input.inputElement);
+
+              flush(function () {
+                assert.isFalse(input.invalid, 'invalid is false');
+                assert.isUndefined(input.errorMessage, 'errorMessage is not defined');
+                assert.isFalse(error.invalid, 'invalid is false');
+                assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+                done();
+              });
+            });
+          });
+        });
+
+
+      });
+
+      test('tooLong/tooShort Error, if input is not within specified range', function (done) {
+        var input = fixture('min4max8');
+        flush(function () {
+          MockInteractions.focus(input.inputElement);
+          input.set('value', 'oh! very long value.');
+          input.fire('change');
+          MockInteractions.blur(input.inputElement);
+
+          flush(function () {
+            //input.validate();
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+            assert.isTrue(error.invalid, 'invalid is true');
+            assert.equal(input.$['i18n-error'].msgid, 'tooLong');
+
+            assert.isTrue(input.invalid, 'invalid is true');
+            assert.equal(input.errorMessage, 'tooLong');
+
+
+            /* MAX Boundary Case*/
+            MockInteractions.focus(input.inputElement);
+            input.set('value', 'boundMax');
+            input.fire('change');
+            MockInteractions.blur(input.inputElement);
+
+            flush(function () {
+              assert.isFalse(input.invalid, 'Boundary Case, invalid is false');
+              assert.isUndefined(input.errorMessage, 'Boundary Case, errorMessage is not defined');
+              assert.isFalse(error.invalid, 'Boundary Case, invalid is false');
+              assert.isUndefined(input.$['i18n-error'].msgid, 'Boundary Case, errorMessage is not defined');
+
+              /* Valid Value */
+              MockInteractions.focus(input.inputElement);
+              input.set('value', 'within');
+              input.fire('change');
+              MockInteractions.blur(input.inputElement);
+
+              flush(function () {
+                assert.isFalse(input.invalid, 'invalid is false');
+                assert.isUndefined(input.errorMessage, 'errorMessage is not defined');
+                assert.isFalse(error.invalid, 'invalid is false');
+                assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+
+
+                MockInteractions.focus(input.inputElement);
+                input.set('value', 'low');
+                input.fire('change');
+                MockInteractions.blur(input.inputElement);
+
+                flush(function () {
+                  //input.validate();
+                  error = getDom(input.root).querySelector('paper-input-error');
+                  assert.ok(error, 'paper-input-error exists');
+                  assert.notEqual(getComputedStyle(error).display, 'none',
+                    'error is not display:none');
+                  assert.isTrue(error.invalid, 'invalid is true');
+                  assert.equal(input.$['i18n-error'].msgid, 'tooShort');
+
+                  assert.isTrue(input.invalid, 'invalid is true');
+                  assert.equal(input.errorMessage, 'tooShort');
+
+                  /* MIN Boundary Case*/
+                  MockInteractions.focus(input.inputElement);
+                  input.set('value', 'just');
+                  input.fire('change');
+                  MockInteractions.blur(input.inputElement);
+
+                  flush(function () {
+                    assert.isFalse(input.invalid, 'Boundary Case, invalid is false');
+                    assert.isUndefined(input.errorMessage,
+                      'Boundary Case, errorMessage is not defined');
+                    assert.isFalse(error.invalid, 'Boundary Case, invalid is false');
+                    assert.isUndefined(input.$['i18n-error'].msgid,
+                      'Boundary Case, errorMessage is not defined');
+                    done();
+                  });
+                });
+              });
+            });
+          });
+        });
+
+      });
+
+      test('when min/max defined without required, min validation should not be triggered for empty value',function () {
+          var input = fixture('min4max8');
+          flush(function () {
+            MockInteractions.focus(input.inputElement);
+            input.value = '';
+            input.validate();
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            //assert.equal(getComputedStyle(error).display, 'none', 'error is not display:none');
+            assert.isFalse(error.invalid, 'invalid is false');
+            assert.notEqual(input.$['i18n-error'].msgid, 'tooShort');
+            assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+        });
+      });
+
+      test('validationFunction is called to validate', function (done) {
+        var input = fixture('custom');
+        flush(function () {
+          input.value = 'A545354';
+          input.validate();
+          var error = getDom(input.root).querySelector('paper-input-error');
+          assert.ok(error, 'paper-input-error exists');
+          assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+          assert.isTrue(input.invalid, 'invalid is true');
+          assert.equal(input.errorMessage, 'custom-validation-failed');
+          done();
+        });
+      });
+    }); 
+
+    suite('a11y', function () {
+
+      test('has aria-labelledby', function (done) {
+        var input = fixture('my-label-input');
+        flush(function () {
+          var inputEl = input.inputElement.inputElement;
+          assert.isTrue(inputEl.hasAttribute('aria-labelledby'));
+          assert.equal(inputEl.getAttribute('aria-labelledby'), getDom(input.root).querySelector(
+            'label').id, 'aria-labelledby points to the label');
+            done();
+        });
+
+      });
+
+      test('has aria-describedby for error message', function (done) {
+        var input = fixture('required');
+        flush(function(){
+          input.validate();
+          flush(function () {
+            var inputEl = input.inputElement.inputElement;
+            assert.isTrue(inputEl.hasAttribute('aria-describedby'));
+            assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
+              'paper-input-error').id, 'aria-describedby points to the error message');
+            done();
+          });  
+        })
+       
+      });
+
+      test('has aria-describedby for character counter', function (done) {
+        var input = fixture('char-counter');
+        flush(function () {
+          var inputEl = input.inputElement.inputElement;
+          assert.isTrue(inputEl.hasAttribute('aria-describedby'));
+          assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
+              'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
+            'aria-describedby points to the character counter');
+          done();
+        });
+      });
+
+      test('has aria-describedby for character counter and error', function (done) {
+        var input = fixture('required-char-counter');
+        flush(function () {
+          var inputEl = input.inputElement.inputElement;
+          assert.isTrue(inputEl.hasAttribute('aria-describedby'));
+          assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
+              'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
+            'aria-describedby points to the error message and character counter');
+          done();
+        });
+      });
+
+      test('focus an input with tabindex', function (done) {
+        var input = fixture('has-tabindex');
+        flush(function () {
+          MockInteractions.focus(input);
+          flush(function () {
+            assert.equal(input.shadowRoot ? input.shadowRoot.activeElement :
+              document.activeElement, input._focusableElement);
+            done();
+          });
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
