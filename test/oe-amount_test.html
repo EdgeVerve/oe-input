@@ -125,7 +125,7 @@
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('numberFormat');
           expect(el.invalid).to.be.true;
           done();
@@ -172,7 +172,7 @@
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('my-custom-error');
           expect(el.invalid).to.be.true;
           done();
@@ -186,7 +186,7 @@
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('my-custom-amt-error');
           expect(el.invalid).to.be.true;
           done();
@@ -321,7 +321,7 @@
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('numberFormat');
           expect(el.invalid).to.be.true;
           done();
@@ -368,31 +368,20 @@
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('my-custom-error');
           expect(el.invalid).to.be.true;
           done();
         });
       });
 
-      test('shows custom error for amount', function (done) {
-        el.set('userErrorMessage', 'my-custom-error');
-        el.$.amt.inputElement.set('bindValue', 'foobar');
-        el.$.amt.inputElement.fire('change');
-        flush(function () {
-          expect(el.amount).to.be.undefined;
-          expect(el.errorMessage).to.equal('my-custom-error');
-          expect(el.invalid).to.be.true;
-          done();
-        });
-      });
 
       test('shows amount specific custom error for amount', function (done) {
         el.set('amtErrorMessage', 'my-custom-amt-error');
         el.$.amt.inputElement.set('bindValue', 'foobar');
         el.$.amt.inputElement.fire('change');
         flush(function () {
-          expect(el.amount).to.be.undefined;
+          expect(el.amount).to.equal(el.$.amt._invalidValue);
           expect(el.errorMessage).to.equal('my-custom-amt-error');
           expect(el.invalid).to.be.true;
           done();

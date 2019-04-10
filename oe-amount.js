@@ -14,9 +14,9 @@ import "@polymer/iron-flex-layout/iron-flex-layout-classes.js";
 import "@polymer/paper-input/paper-input-error.js";
 
 import "oe-i18n-msg/oe-i18n-msg.js";
-import "oe-input/oe-input.js";
+import "./oe-input.js";
 import "oe-combo/oe-combo.js";
-import "oe-input/oe-decimal.js";
+import "./oe-decimal.js";
 import { OEFieldMixin } from "oe-mixins/oe-field-mixin";
 
 /**
@@ -130,9 +130,9 @@ class OeAmount extends mixinBehaviors([IronFormElementBehavior], OECommonMixin(P
         observer: '_currencyChanged'
       },
 
-      /*
-      * Default initial currency code
-      */
+      /**
+       * Default initial currency code
+       */
       defaultCcy: {
         type: String
       },

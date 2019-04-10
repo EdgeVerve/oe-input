@@ -62,6 +62,8 @@ import { dedupingMixin } from "@polymer/polymer/lib/utils/mixin.js";
  */
 const DecimalMixin = function (BaseClass) {
 
+    const invalidValue = {};
+
     /**
      * @polymer
      * @mixinClass
@@ -135,7 +137,7 @@ const DecimalMixin = function (BaseClass) {
                     break;
                 }
             }
-
+            this._invalidValue = invalidValue;
             let groupSeparator;
             for (var i = 0; i < numberString.length; i++) { // eslint-disable-line no-redeclare
                 var char = numberString.charAt(i); // eslint-disable-line no-redeclare
@@ -278,8 +280,13 @@ const DecimalMixin = function (BaseClass) {
          */
         _valueChanged(newValue, oldValue) { // eslint-disable-line no-unused-vars
 
+            if(this.value === invalidValue){
+                return;
+            }
+
             if (!newValue && newValue !== 0) {
                 this.inputElement.bindValue = '';
+                this.validate();
                 return;
             }
 
@@ -289,7 +296,7 @@ const DecimalMixin = function (BaseClass) {
             }
 
             this.inputElement.bindValue = this._format(newValue);
-
+            this.validate();
         }
 
         /**
@@ -303,7 +310,7 @@ const DecimalMixin = function (BaseClass) {
             if (newstr !== '') {
                 let number = this._parseShorthand(newstr);
                 if (isNaN(number)) {
-                    this.value = undefined;
+                    this.value = invalidValue;
                     this.setValidity(false, 'numberFormat');
                     return;
                 }

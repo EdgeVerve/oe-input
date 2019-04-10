@@ -66,6 +66,15 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
 
         input{
           @apply --paper-input-container-shared-input-style;
+          font-family: inherit;
+          font-weight: inherit;
+          font-size: inherit;
+          letter-spacing: inherit;
+          word-spacing: inherit;
+          line-height: inherit;
+          text-shadow: inherit;
+          color: inherit;
+          cursor: inherit;
         }
 
         input::-webkit-input-placeholder {
