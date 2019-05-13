@@ -10,6 +10,7 @@ import { PaperInputBehavior } from "@polymer/paper-input/paper-input-behavior.js
 import { IronFormElementBehavior } from "@polymer/iron-form-element-behavior/iron-form-element-behavior.js";
 import { IronValidatableBehavior } from "@polymer/iron-validatable-behavior/iron-validatable-behavior.js";
 import { OEFieldMixin } from "oe-mixins/oe-field-mixin.js";
+import { IronControlState } from "@polymer/iron-behaviors/iron-control-state.js";
 import DecimalMixin from "./oe-decimal-mixin.js";
 import "@polymer/paper-input/paper-input-char-counter.js";
 import "@polymer/paper-input/paper-input-container.js";
@@ -123,6 +124,21 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
     get _focusableElement() {
         return PolymerElement ? this.inputElement._inputElement :
             this.inputElement;
+    }
+
+    /**
+     * Forward focus to inputElement. Overriden from IronControlState.
+     * Fix : set focused property only if the event is not from a slotted element.
+     */
+    _focusBlurHandler(event) {
+        if (!this.isLightDescendant(event.target)) {
+            IronControlState._focusBlurHandler.call(this, event);
+        }
+
+        // Forward the focus to the nested input.
+        if (this.focused && !this._shiftTabPressed && this._focusableElement) {
+            this._focusableElement.focus();
+        }
     }
 
 }

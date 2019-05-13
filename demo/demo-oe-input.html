@@ -15,6 +15,7 @@
     import '@polymer/polymer/lib/elements/dom-bind';
     import '@polymer/polymer/lib/elements/custom-style';
     import '@polymer/iron-icon/iron-icon';
+    import '@polymer/paper-icon-button/paper-icon-button';
     import '@polymer/iron-icons/iron-icons';
   </script>
 
@@ -41,6 +42,13 @@
   </script>
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
+      paper-icon-button{
+        padding:0px 8px;
+      }
+
+      paper-icon-button[focused]{
+        color:var(--primary-color);
+      }
     </style>
   </custom-style>
 </head>
