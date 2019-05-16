@@ -78,20 +78,41 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
           cursor: inherit;
         }
 
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          @apply --paper-input-container-input-webkit-spinner;
+        }
+  
+        input::-webkit-clear-button {
+          @apply --paper-input-container-input-webkit-clear;
+        }
+  
+        input::-webkit-calendar-picker-indicator {
+          @apply --paper-input-container-input-webkit-calendar-picker-indicator;
+        }
+  
+        input::-ms-clear {
+          @apply --paper-input-container-ms-clear;
+        }
+  
+        input::-ms-reveal {
+          @apply --paper-input-container-ms-reveal;
+        }
+        
         input::-webkit-input-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input:-moz-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input::-moz-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input:-ms-input-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
 
         label{
