@@ -92,7 +92,7 @@ class OeInputMasked extends mixinBehaviors([IronFormElementBehavior, PaperInputB
         </iron-input>
         <slot name="suffix" slot="suffix"></slot>
         <paper-input-error invalid={{invalid}} slot="add-on">
-          <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+          <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
         </paper-input-error>
         <template is="dom-if" if="[[charCounter]]">
           <paper-input-char-counter slot="add-on"></paper-input-char-counter>

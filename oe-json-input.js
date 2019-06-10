@@ -76,7 +76,7 @@ class OeJsonInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBeh
                 on-change="_displayChanged" tabindex$="[[tabindex]]">
             </iron-autogrow-textarea>
             <paper-input-error invalid={{invalid}} slot="add-on">
-                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
             </paper-input-error>
             <template is="dom-if" if="[[charCounter]]">
                 <paper-input-char-counter slot="add-on"></paper-input-char-counter>

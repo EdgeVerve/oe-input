@@ -133,7 +133,7 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
                 <slot name="suffix" slot="suffix"></slot>
             </template>
             <paper-input-error invalid={{invalid}} slot="add-on">
-                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
             </paper-input-error>
         </paper-input-container>
         `;
