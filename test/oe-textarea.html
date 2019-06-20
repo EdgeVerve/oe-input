@@ -72,7 +72,7 @@
       test('setting value sets the input value', function () {
         var input = fixture('basic');
         input.value = 'foobar';
-        assert.equal(input.inputElement.bindValue, input.value, 'inputElement value equals input.value');
+        assert.equal(input.inputElement.value, input.value, 'inputElement value equals input.value');
       });
 
       test('empty required input shows error', function () {
@@ -158,7 +158,7 @@
         var eFocus = function (event) { // eslint-disable-line no-unused-vars
           assert(input.focused, 'input is focused');
           nFocusEvents += 1;
-          MockInteractions.blur(input.inputElement.textarea);
+          MockInteractions.blur(input.inputElement);
           input.removeEventListener('focus', eFocus);
         };
         var eBlur = function () {
@@ -168,7 +168,7 @@
         };
         input.addEventListener('focus', eFocus);
         input.addEventListener('blur', eBlur);
-        MockInteractions.focus(input.inputElement.textarea);
+        MockInteractions.focus(input.inputElement);
         assert.isTrue(nFocusEvents >= 1, 'focus event fired');
         assert.isTrue(nBlurEvents >= 1, 'blur event fired')
       });
@@ -179,24 +179,24 @@
 
       test('has aria-labelledby', function () {
         var input = fixture('label');
-        assert.isTrue(input.inputElement.textarea.hasAttribute('aria-labelledby'))
-        assert.equal(input.inputElement.textarea.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector(
+        assert.isTrue(input.inputElement.hasAttribute('aria-labelledby'))
+        assert.equal(input.inputElement.getAttribute('aria-labelledby'), Polymer.dom(input.root).querySelector(
           'label').id, 'aria-labelledby points to the label');
       });
 
       test('has aria-describedby for error message', function () {
         var input = fixture('required');
         forceXIfStamp(input);
-        assert.isTrue(input.inputElement.textarea.hasAttribute('aria-describedby'));
-        assert.equal(input.inputElement.textarea.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
+        assert.isTrue(input.inputElement.hasAttribute('aria-describedby'));
+        assert.equal(input.inputElement.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
           'oe-input-error').id, 'aria-describedby points to the error message');
       });
 
       test('has aria-describedby for character counter', function () {
         var input = fixture('char-counter');
         forceXIfStamp(input);
-        assert.isTrue(input.inputElement.textarea.hasAttribute('aria-describedby'));
-        assert.equal(input.inputElement.textarea.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
+        assert.isTrue(input.inputElement.hasAttribute('aria-describedby'));
+        assert.equal(input.inputElement.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
             'oe-input-error').id + ' ' + Polymer.dom(input.root).querySelector('paper-input-char-counter').id,
           'aria-describedby points to the character counter');
       });
@@ -204,8 +204,8 @@
       test('has aria-describedby for character counter and error', function () {
         var input = fixture('required-char-counter');
         forceXIfStamp(input);
-        assert.isTrue(input.inputElement.textarea.hasAttribute('aria-describedby'));
-        assert.equal(input.inputElement.textarea.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
+        assert.isTrue(input.inputElement.hasAttribute('aria-describedby'));
+        assert.equal(input.inputElement.getAttribute('aria-describedby'), Polymer.dom(input.root).querySelector(
             'oe-input-error').id + ' ' + Polymer.dom(input.root).querySelector('paper-input-char-counter').id,
           'aria-describedby points to the error message and character counter');
       });
