@@ -39,16 +39,126 @@
     function clearInput() {
       document.getElementById('inputWithButton').value = '';
     }
+    function clearInput2() {
+      document.getElementById('demoId').value = '';
+    }
   </script>
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
-      paper-icon-button{
-        padding:0px 8px;
+      paper-icon-button {
+        padding: 0px 8px;
       }
 
-      paper-icon-button[focused]{
-        color:var(--primary-color);
+      paper-icon-button[focused] {
+        color: var(--primary-color);
       }
+      .custom-class:hover {
+        --border-color:black;
+        --label-color: black;
+        --prefix-color: black;
+        --suffix-color: black;
+      }
+
+      .custom-class[invalid] {
+        --border-thick: 2px;
+        --border-color:red;
+        --label-color: red;
+        --prefix-color: red;
+        --suffix-color: red;
+        --oe-input-char-counter: {
+           visibility: hidden;
+           
+        }
+      }
+      .custom-class[focused]:not([invalid]) {
+        caret-color: blue;
+        --border-thick: 2px;
+        --border-color:blue;
+        --label-color: blue;
+        --prefix-color: blue;
+        --suffix-color: blue;
+      }
+      .custom-class {
+        margin: 5px 0px 20px;
+        --border-thick: 1px;
+        --border-color:#828282c9;
+        --label-color: #828282c9;
+        --prefix-color: #828282c9;
+        --suffix-color: #828282c9;
+        --paper-input-container: {
+          border-width: 0px;
+          box-shadow: 0px 0px 0px var(--border-thick) var(--border-color);
+          border-radius: 4px;
+          padding:0px 0px 0px 5px;
+          box-sizing: border-box;
+        }
+        --iron-input: {
+          padding: 5px 3px 1px 7px;
+        }
+        --paper-font-caption: {
+          position: absolute;
+        }
+        --paper-input-container-label-floating: {
+          z-index: 2;
+          top: 8px;
+          display: flex;
+          background: #FFF;
+
+        }
+        --paper-input-container-underline: {
+          display: none;
+        }
+
+        --paper-input-container-underline-focus: {
+          display: none;
+        }
+        --paper-input-container-disabled: {
+          border: 1px dotted #212121;
+          border-radius: 4px;
+          padding: 0px 0px 0px 5px;
+          box-sizing: border-box;
+
+        }
+        --oe-label-mixin: {
+          color: var(--label-color);
+          padding: 4px 4px 0px 4px;
+          margin-left: 4px;
+          width: auto;
+        }
+        --oe-required-mixin: {
+          color: #FF9800;
+        }
+        --paper-input-prefix: {
+          color: var(--prefix-color) ;
+          padding: 1px 0px 0px 5px;
+          height: 22px;
+        }
+        --oe-input-error: {
+          padding-top: 2px;
+          padding-left: 8px;
+          font-size: 12px;
+        }
+        --oe-input-char-counter: {
+           padding-top: 2px;
+           padding-left: 8px;
+           font-size: 12px;
+        }
+        --paper-input-suffix: {
+          color: var(--suffix-color);
+          display: flex;
+          align-items: center;
+          border-left: 1px solid var(--suffix-color);
+          border-radius: 0px 4px 4px 0px;
+          background-color: #eeeeee;
+          box-sizing: border-box;
+          height: 32px;
+          margin-bottom: -2px;
+        }
+        --paper-input-container-input-webkit-spinner: {
+          margin-right: 8px;
+        }
+      }
+      
     </style>
   </custom-style>
 </head>
@@ -58,9 +168,12 @@
     <h3>Inputs can have different types, and be disabled</h3>
     <demo-snippet>
       <template>
-        <oe-input label="text input"></oe-input>
-        <oe-input label="password input" type="password"></oe-input>
-        <oe-input label="disabled input" disabled></oe-input>
+        <oe-input class="custom-class" id="demoId" label="text input" placeholder="placeholder text">
+            <paper-icon-button slot="suffix" onclick="clearInput2()" icon="clear" alt="clear" title="clear">
+              </paper-icon-button>
+        </oe-input>
+        <oe-input  label="password input" type="password"></oe-input>
+        <oe-input  label="disabled input" disabled></oe-input>
       </template>
     </demo-snippet>
 
@@ -68,7 +181,7 @@
     <demo-snippet>
       <template>
         <oe-input label="simple character counter" char-counter></oe-input>
-        <oe-input label="input with at most 10 characters" char-counter maxlength="10"></oe-input>
+        <oe-input class="custom-class" label="input with at most 10 characters" char-counter maxlength="10"></oe-input>
       </template>
     </demo-snippet>
 
@@ -85,11 +198,11 @@
     <h3>Inputs can validate automatically or on demand, and can have custom error messages</h3>
     <demo-snippet>
       <template>
-        <oe-input label="Required field" required auto-validate></oe-input>
-        <oe-input label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
-        <oe-input label="this input will only let you type letters" auto-validate allowed-pattern="[a-zA-Z]"></oe-input>
-        <oe-input label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
-        <oe-input id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
+        <oe-input  class="custom-class" label="Required field" required auto-validate></oe-input>
+        <oe-input  class="custom-class" label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
+        <oe-input  class="custom-class" label="this input will only let you type letters" auto-validate allowed-pattern="[a-zA-Z]"></oe-input>
+        <oe-input  class="custom-class" label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
+        <oe-input  class="custom-class" id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
         <button onclick="validate()">Validate!</button>
       </template>
     </demo-snippet>
@@ -97,51 +210,8 @@
     <h3>Inputs can have custom validator functions</h3>
     <demo-snippet>
       <template>
-
         <dom-bind>
           <template>
-            <custom-style>
-            <style>
-              .custom-input {
-                --paper-input-container-input: {
-                  border: 1px solid var(--secondary-text-color);
-                  border-radius: 4px;
-                  padding: 12px 8px 4px 8px;
-                  box-sizing: border-box;
-                }
-                --paper-input-container-input-focus: {
-                  border-bottom-color: var(--primary-color);
-                }
-                --paper-input-container-input-invalid: {
-                  border-bottom-color: var(--error-color);
-                }
-                --paper-input-container-label: {
-                  top: 12px;
-                  left: 8px;
-                }
-                --paper-input-container-label-floating: {
-                  z-index: 2;
-                  top: 10px;
-                  display: flex;
-                }
-                --paper-input-container-underline: {
-                  display: none;
-                }
-                --paper-input-container-underline-focus: {
-                  display: none;
-                }
-                --oe-label-mixin: {
-                  background: #FFF;
-                  padding: 0px 4px;
-                  width: auto;
-                }
-                --oe-required-mixin: {
-                  color:#FF9800;
-                }
-              }
-
-            </style>
-          </custom-style>
             <oe-input label="Custom Validator" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"></oe-input>
             <oe-input class="custom-input" label="Custom Validator with custom error" required validate-on-input validation-function="OEUtils.shouldAllBeLowercase"
               error-message="input text should be in lower case"></oe-input>
@@ -170,14 +240,16 @@
     <h3>Inputs can have prefixes and suffixes</h3>
     <demo-snippet class="horizontal">
       <template>
-        <oe-input label="total" type="number">
+        <oe-input class="custom-class" label="total" type="number">
           <div slot="prefix">$</div>
         </oe-input>
-        <oe-input label="username" id="inputWithButton">
+        <oe-input class="custom-class" label="username" id="inputWithButton">
           <iron-icon icon="mail" slot="prefix"></iron-icon>
-          <div slot="suffix">@email.com</div>
-          <paper-icon-button slot="suffix" onclick="clearInput()" icon="clear" alt="clear" title="clear">
+          <div slot="suffix">
+          <div >@email.com</div>
+          <paper-icon-button  onclick="clearInput()" icon="clear" alt="clear" title="clear">
           </paper-icon-button>
+        </div>
         </oe-input>
       </template>
     </demo-snippet>
