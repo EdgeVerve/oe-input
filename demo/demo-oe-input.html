@@ -168,10 +168,7 @@
     <h3>Inputs can have different types, and be disabled</h3>
     <demo-snippet>
       <template>
-        <oe-input class="custom-class" id="demoId" label="text input" placeholder="placeholder text">
-            <paper-icon-button slot="suffix" onclick="clearInput2()" icon="clear" alt="clear" title="clear">
-              </paper-icon-button>
-        </oe-input>
+        <oe-input id="demoId" label="text input"></oe-input>
         <oe-input  label="password input" type="password"></oe-input>
         <oe-input  label="disabled input" disabled></oe-input>
       </template>
@@ -181,7 +178,7 @@
     <demo-snippet>
       <template>
         <oe-input label="simple character counter" char-counter></oe-input>
-        <oe-input class="custom-class" label="input with at most 10 characters" char-counter maxlength="10"></oe-input>
+        <oe-input label="input with at most 10 characters" char-counter maxlength="10"></oe-input>
       </template>
     </demo-snippet>
 
@@ -198,11 +195,11 @@
     <h3>Inputs can validate automatically or on demand, and can have custom error messages</h3>
     <demo-snippet>
       <template>
-        <oe-input  class="custom-class" label="Required field" required auto-validate></oe-input>
-        <oe-input  class="custom-class" label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
-        <oe-input  class="custom-class" label="this input will only let you type letters" auto-validate allowed-pattern="[a-zA-Z]"></oe-input>
-        <oe-input  class="custom-class" label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
-        <oe-input  class="custom-class" id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
+        <oe-input label="Required field" required auto-validate></oe-input>
+        <oe-input label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
+        <oe-input label="this input will only let you type letters" auto-validate allowed-pattern="[a-zA-Z]"></oe-input>
+        <oe-input label="this input requires letters only" auto-validate pattern="[a-zA-Z]*" error-message="letters only!"></oe-input>
+        <oe-input id="inputForValidation" required label="this input is manually validated and requires letters only" pattern="[a-zA-Z]*"></oe-input>
         <button onclick="validate()">Validate!</button>
       </template>
     </demo-snippet>
@@ -240,16 +237,16 @@
     <h3>Inputs can have prefixes and suffixes</h3>
     <demo-snippet class="horizontal">
       <template>
-        <oe-input class="custom-class" label="total" type="number">
+        <oe-input label="total" type="number">
           <div slot="prefix">$</div>
         </oe-input>
-        <oe-input class="custom-class" label="username" id="inputWithButton">
+        <oe-input label="username" id="inputWithButton">
           <iron-icon icon="mail" slot="prefix"></iron-icon>
-          <div slot="suffix">
-          <div >@email.com</div>
-          <paper-icon-button  onclick="clearInput()" icon="clear" alt="clear" title="clear">
+          
+          <div slot="suffix">@email.com</div>
+          <paper-icon-button  slot="suffix" onclick="clearInput()" icon="clear" alt="clear" title="clear">
           </paper-icon-button>
-        </div>
+        
         </oe-input>
       </template>
     </demo-snippet>
@@ -269,6 +266,27 @@
     <demo-snippet>
       <template>
         <oe-input type="number" label="text input" step="0.1"></oe-input>
+      </template>
+    </demo-snippet>
+
+    <h3>oe-input with custom style</h3>
+    <demo-snippet class="horizontal">
+      <template>
+        <oe-input class="custom-class" label="username" id="inputWithButton">
+          <iron-icon icon="mail" slot="prefix"></iron-icon>
+          <div slot="suffix">
+          <div >@email.com</div>
+          <paper-icon-button  onclick="clearInput()" icon="clear" alt="clear" title="clear">
+          </paper-icon-button>
+        </div>
+        </oe-input>
+        <oe-input  class="custom-class" label="Required field" required auto-validate></oe-input>
+        <oe-input  class="custom-class" label="Required field with custom error" required auto-validate user-error-message="needs some text!"></oe-input>
+        <oe-input class="custom-class" id="demoId" label="text input" placeholder="placeholder text">
+          <paper-icon-button slot="suffix" onclick="clearInput2()" icon="clear" alt="clear" title="clear">
+            </paper-icon-button>
+      </oe-input>
+      <oe-input class="custom-class" label="disabled input" disabled></oe-input>
       </template>
     </demo-snippet>
   </div>
