@@ -319,7 +319,7 @@ const DecimalMixin = function (BaseClass) {
                 //divide by 100 if entered value is a percentage
                 number = this.percentage ? number / 100 : number;
 
-                if(this.value != number){
+                if(this.value !== number){
                     this.set('value', number);
                   }
                   else{
