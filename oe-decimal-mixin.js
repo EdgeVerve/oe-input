@@ -322,7 +322,9 @@ const DecimalMixin = function (BaseClass) {
                 if(this.value != number){
                     this.set('value', number);
                   }
-                  this._valueChanged(number,this.value);
+                  else{
+                    this._valueChanged(number,this.value);
+                  }
                 //this.inputElement.bindValue = this._format(number);
             } else {
                 this.value = undefined;
