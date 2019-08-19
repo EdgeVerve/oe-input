@@ -165,6 +165,15 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
         }
     }
 
+    /**
+     * Iron-Input.inputElement remains undefined (looks like _initSlottedInput only for 
+     * subsequent dom-change) 
+     */
+    connectedCallback(){
+      super.connectedCallback();
+      this.inputElement._initSlottedInput();
+    }
+
 }
 
 window.customElements.define(OeDecimal.is, DecimalMixin(OEFieldMixin(OeDecimal)));

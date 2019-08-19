@@ -126,6 +126,11 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
         paper-input-error{
           @apply --oe-input-error;
         }
+
+        ::slotted([slot=suffix]) {
+          @apply --oe-input-suffix;
+        }
+
       </style>
       <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
         auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
@@ -136,7 +141,7 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
               <span class="required" aria-hidden="true"> *</span>
             </template>
         </label>
-        <iron-input id="[[_inputId]]" slot="input" bind-value="{{value}}" on-change="validate" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
+        <iron-input id="[[_inputId]]" slot="input" bind-value="{{value}}" on-change="_displayChanged" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
           <input minlength$="[[minlength]]" maxlength$="[[maxlength]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
            type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" min$="[[min]]"
           max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]"  tabindex$="[[tabindex]]"
@@ -213,6 +218,13 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
     // Forward the focus to the nested input.
     if (this.focused && !this._shiftTabPressed && this._focusableElement) {
       this._focusableElement.focus();
+    }
+  }
+
+  _displayChanged(){
+    var status = this.validate();
+    if(status && this.fieldId) {
+      this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
     }
   }
   

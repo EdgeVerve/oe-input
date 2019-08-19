@@ -84,7 +84,7 @@ class OeInputMasked extends mixinBehaviors([IronFormElementBehavior, PaperInputB
               <span class="required"  aria-hidden="true"> *</span>
             </template>
         </label>
-        <iron-input id="[[_inputId]]" slot="input" bind-value="{{display}}" on-change="validate" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
+        <iron-input id="[[_inputId]]" slot="input" bind-value="{{display}}" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
           <input minlength$="[[minlength]]" maxlength$="[[maxlength]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
            type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" min$="[[min]]"
           max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]"  tabindex$="[[tabindex]]"
@@ -145,13 +145,19 @@ class OeInputMasked extends mixinBehaviors([IronFormElementBehavior, PaperInputB
         return isValid;
     }
 
+    _displayChanged(){
+      var status = this.validate();
+      if(status && this.fieldId) {
+        this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+      }
+    }    
     /**
      * Connected Callback to initiate event listeners.
      * 
      */
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener('change', e => this.validate(e));
+        this.addEventListener('change', e => this._displayChanged(e));
         this.addEventListener('keydown', e => this._buildValue(e));
         this.addEventListener('keypress', e => this._buildValue(e));
         this.addEventListener('blur', e => this._blured(e));
