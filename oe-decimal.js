@@ -106,10 +106,18 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
             input:-ms-input-placeholder {
               color: var(--paper-input-container-color, var(--secondary-text-color));
             }
-
-            label {
+            iron-input {
+                @apply --iron-input;
+              }
+              label{
                 @apply --oe-label-mixin;
-            }
+              }
+              paper-input-char-counter{
+                @apply --oe-input-char-counter;
+              }
+              paper-input-error{
+                @apply --oe-input-error;
+              }
         </style>
         <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
             auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
@@ -138,7 +146,17 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
         </paper-input-container>
         `;
     }
-
+    static get properties() {
+        return {
+    
+          invalid: {
+            type: Boolean,
+            value: false, 
+            notify: true,
+            reflectToAttribute: true
+          }
+          }
+        }
     /**
      * Returns a reference to the focusable element. Overridden from
      * PaperInputBehavior to correctly focus the native input.
