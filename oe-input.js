@@ -1,6 +1,6 @@
 /**
  * @license
- * �2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+ * ?2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
  * Bangalore, India. All Rights Reserved.
  */
 
@@ -142,7 +142,7 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
             </template>
         </label>
         <iron-input id="[[_inputId]]" slot="input" bind-value="{{value}}" on-change="_displayChanged" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
-          <input minlength$="[[minlength]]" maxlength$="[[maxlength]]" oncopy$="[[oncopy]]" onpaste$="[[onpaste]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
+          <input minlength$="[[minlength]]" maxlength$="[[maxlength]]"  oncopy$="[[preventCopyPaste]]" onpaste$="[[preventCopyPaste]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
            type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" min$="[[min]]"
           max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]"  tabindex$="[[tabindex]]"
           autosave$="[[autosave]]" results$="[[results]]" accept$="[[accept]]" multiple$="[[multiple]]">
@@ -165,15 +165,9 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
         notify: true,
         reflectToAttribute: true
       },
-      oncopy: {
-        type: Object,
-        value: function () {
-        }
-      },
-      onpaste: {
-        type: Object,
-        value: function () {
-        }
+      preventCopyPaste: {
+        type: String,
+        notify: true
       }
       }
     }
