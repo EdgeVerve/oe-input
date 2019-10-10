@@ -1,6 +1,6 @@
 /**
  * @license
- * ©2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
+ * ?2018-2019 EdgeVerve Systems Limited (a fully owned Infosys subsidiary),
  * Bangalore, India. All Rights Reserved.
  */
 
@@ -142,7 +142,7 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
             </template>
         </label>
         <iron-input id="[[_inputId]]" slot="input" bind-value="{{value}}" on-change="_displayChanged" allowed-pattern="[[allowedPattern]]" invalid="{{invalid}}" validator="[[validator]]">
-          <input minlength$="[[minlength]]" maxlength$="[[maxlength]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
+          <input minlength$="[[minlength]]" maxlength$="[[maxlength]]"  oncopy$="[[_handleCopyPaste(preventCopyPaste)]]" onpaste$="[[_handleCopyPaste(preventCopyPaste)]]" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" disabled$="[[disabled]]"  prevent-invalid-input="[[preventInvalidInput]]"
            type$="[[type]]" pattern$="[[pattern]]" required$="[[required]]" autocomplete$="[[autocomplete]]" autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" min$="[[min]]"
           max$="[[max]]" step$="[[step]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]" list$="[[list]]" size$="[[size]]" autocapitalize$="[[autocapitalize]]" autocorrect$="[[autocorrect]]"  tabindex$="[[tabindex]]"
           autosave$="[[autosave]]" results$="[[results]]" accept$="[[accept]]" multiple$="[[multiple]]">
@@ -159,12 +159,16 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
   }
   static get properties() {
     return {
-
       invalid: {
         type: Boolean,
         value: false, 
         notify: true,
         reflectToAttribute: true
+      },
+      preventCopyPaste: {
+        type: Boolean,
+        notify: true,
+	value:false
       }
       }
     }
@@ -205,7 +209,12 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
     super.connectedCallback();
     this.addEventListener('change', e => this.validate(e));
   }
-
+  _handleCopyPaste (preventCopyPaste){
+    if(preventCopyPaste){
+       return "return false";
+    }
+ }
+ 
   /**
    * Forward focus to inputElement. Overriden from IronControlState.
    * Fix : set focused property only if the event is not from a slotted element.

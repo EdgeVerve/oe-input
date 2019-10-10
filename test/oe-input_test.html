@@ -145,6 +145,11 @@
       </oe-input>
     </template>
   </test-fixture>
+  <test-fixture id="preventCopyPaste">
+    <template>
+      <oe-input prevent-copy-paste></oe-input>
+    </template>
+  </test-fixture>
 
 
   <script type="module">
@@ -734,6 +739,16 @@
               document.activeElement, input._focusableElement);
             done();
           });
+        });
+      });
+
+      test('prevent copy paste', function (done) {
+        var input = fixture('preventCopyPaste');
+        flush(function () {
+          var inputEle = input.inputElement.inputElement;
+          assert.equal(inputEle.getAttribute('onpaste'),"return false");
+          assert.equal(inputEle.getAttribute('oncopy'),"return false");
+          done();
         });
       });
     });
