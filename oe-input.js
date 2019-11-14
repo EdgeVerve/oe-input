@@ -8,6 +8,7 @@ import { html, PolymerElement } from "@polymer/polymer/polymer-element.js";
 import { mixinBehaviors } from "@polymer/polymer/lib/legacy/class.js";
 import { PaperInputBehavior } from "@polymer/paper-input/paper-input-behavior.js";
 import { IronFormElementBehavior } from "@polymer/iron-form-element-behavior/iron-form-element-behavior.js";
+import { IronControlState } from "@polymer/iron-behaviors/iron-control-state";
 import { OEFieldMixin } from "oe-mixins/oe-field-mixin.js";
 import "@polymer/paper-input/paper-input-char-counter.js";
 import "@polymer/paper-input/paper-input-container.js";
@@ -66,22 +67,52 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
 
         input{
           @apply --paper-input-container-shared-input-style;
+          font-family: inherit;
+          font-weight: inherit;
+          font-size: inherit;
+          letter-spacing: inherit;
+          word-spacing: inherit;
+          line-height: inherit;
+          text-shadow: inherit;
+          color: inherit;
+          cursor: inherit;
         }
 
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          @apply --paper-input-container-input-webkit-spinner;
+        }
+  
+        input::-webkit-clear-button {
+          @apply --paper-input-container-input-webkit-clear;
+        }
+  
+        input::-webkit-calendar-picker-indicator {
+          @apply --paper-input-container-input-webkit-calendar-picker-indicator;
+        }
+  
+        input::-ms-clear {
+          @apply --paper-input-container-ms-clear;
+        }
+  
+        input::-ms-reveal {
+          @apply --paper-input-container-ms-reveal;
+        }
+        
         input::-webkit-input-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input:-moz-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input::-moz-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
-
+  
         input:-ms-input-placeholder {
-          color: var(--paper-input-container-color, --secondary-text-color);
+          color: var(--paper-input-container-color, var(--secondary-text-color));
         }
 
         label{
@@ -152,6 +183,21 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
     this.addEventListener('change', e => this.validate(e));
   }
 
+  /**
+   * Forward focus to inputElement. Overriden from IronControlState.
+   * Fix : set focused property only if the event is not from a slotted element.
+   */
+  _focusBlurHandler(event) {
+    if(!this.isLightDescendant(event.target)){
+      IronControlState._focusBlurHandler.call(this, event);
+    }
+    
+    // Forward the focus to the nested input.
+    if (this.focused && !this._shiftTabPressed && this._focusableElement) {
+      this._focusableElement.focus();
+    }
+  }
+  
 }
 
 window.customElements.define(OeInput.is, OEFieldMixin(OeInput));

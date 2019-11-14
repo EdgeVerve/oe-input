@@ -138,18 +138,27 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="suffix">
+    <template>
+      <oe-input>
+        <paper-icon-button icon="clear" id="suffixBtn" slot="suffix"></paper-icon-button>
+      </oe-input>
+    </template>
+  </test-fixture>
+
 
   <script type="module">
     import { DomApi } from "@polymer/polymer/lib/legacy/polymer.dom";
+    import "@polymer/paper-icon-button/paper-icon-button.js";
     import '@polymer/iron-test-helpers/mock-interactions';
 
     function getDom(node) {
       return new DomApi(node);
     }
-  
+
     suite('basic', function () {
 
-  
+
       test('setting value sets the input value', function (done) {
         var input = fixture('basic');
         input.set('value', 'foobar');
@@ -161,9 +170,9 @@
 
       test('placeholder does not overlap label', function (done) {
         var input = fixture('placeholder');
-        flush(function(){
+        flush(function () {
           assert.equal(input.inputElement.inputElement.placeholder, input.placeholder,
-          'inputElement.placeholder equals input.placeholder');
+            'inputElement.placeholder equals input.placeholder');
           assert.equal(input.noLabelFloat, false);
           var floatingLabel = getDom(getDom(input.root).querySelector('paper-input-container').root).querySelector(
             '.label-is-floating');
@@ -191,17 +200,17 @@
 
       test('empty required input shows error', function (done) {
         var input = fixture('required');
-        flush(function(){
-            input.validate();
-            flush(function () {
-              var error = getDom(input.root).querySelector('paper-input-error');
-              assert.ok(error, 'paper-input-error exists');
-              assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
-              done();
-            });
+        flush(function () {
+          input.validate();
+          flush(function () {
+            var error = getDom(input.root).querySelector('paper-input-error');
+            assert.ok(error, 'paper-input-error exists');
+            assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
+            done();
+          });
         });
       });
-        
+
 
       test('character counter is displayed', function (done) {
         var input = fixture('char-counter');
@@ -215,7 +224,7 @@
 
       test('validator is used', function (done) {
         var input = fixture('validator');
-        flush(function(){
+        flush(function () {
           assert.ok(input.inputElement.invalid, 'input is invalid');
           done();
         })
@@ -223,13 +232,13 @@
 
       test('caret position is preserved', function (done) {
         var input = fixture('basic');
-        flush(function(){
+        flush(function () {
           var ironInput = input.inputElement;
           input.value = 'nananana';
           ironInput.selectionStart = 2;
           ironInput.selectionEnd = 2;
           input.updateValueAndPreserveCaret('nanananabatman');
-          flush(function(){
+          flush(function () {
             assert.equal(ironInput.selectionStart, 2, 'selectionStart is preserved');
             assert.equal(ironInput.selectionEnd, 2, 'selectionEnd is preserved');
             done();
@@ -267,6 +276,18 @@
         assert.isTrue(nBlurEvents >= 1, 'blur event fired');
       });
 
+      test('focus passed to light Descendants should not focus the input', function (done) {
+        var slotted = fixture('suffix');
+        var btn = slotted.querySelector('#suffixBtn');
+        flush(function () {
+          btn.fire("focus");
+          flush(function () {
+            assert.isFalse(slotted.hasAttribute("focused"));
+            assert.isTrue(btn.hasAttribute("focused"));
+            done();
+          });
+        });
+      });
     });
 
     suite('focused styling (integration test)', function () {
@@ -291,14 +312,14 @@
 
       test('for required element, invalid and errorMessage should not be set by default', function (done) {
         var input = fixture('required');
-         flush(function(){
-            assert.isFalse(input.invalid, 'invalid is false');
-            assert.isUndefined(input.errorMessage, 'errorMessage is undefined');
-            var error = getDom(input.root).querySelector('paper-input-error');
-            assert.isFalse(error.invalid, 'invalid is false');
-            assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is undefined');
-            done();
-          });
+        flush(function () {
+          assert.isFalse(input.invalid, 'invalid is false');
+          assert.isUndefined(input.errorMessage, 'errorMessage is undefined');
+          var error = getDom(input.root).querySelector('paper-input-error');
+          assert.isFalse(error.invalid, 'invalid is false');
+          assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is undefined');
+          done();
+        });
       });
 
       test('invalid attribute updated after calling validate()', function (done) {
@@ -317,10 +338,10 @@
 
       test('invalid attribute updated for required field', function (done) {
         var input = fixture('required');
-        flush(function(){
+        flush(function () {
           input.validate();
           flush(function () {
-          
+
             var error = getDom(input.root).querySelector('paper-input-error');
             assert.ok(error, 'paper-input-error exists');
             assert.notEqual(getComputedStyle(error).display, 'none', 'error is not display:none');
@@ -344,7 +365,7 @@
             });
           });
         })
-       
+
       });
 
       test('patternMismatch Error, if input is not in proper format', function (done) {
@@ -388,7 +409,7 @@
         flush(function () {
           MockInteractions.focus(input.inputElement);
           input.set('value', 'foobar');
-          flush(function(){
+          flush(function () {
             input.fire('change');
             MockInteractions.blur(input.inputElement);
 
@@ -431,7 +452,7 @@
               });
             });
           });
-         
+
         });
 
       });
@@ -573,18 +594,18 @@
 
       });
 
-      test('when min/max defined without required, min validation should not be triggered for empty value',function () {
-          var input = fixture('min4max8');
-          flush(function () {
-            MockInteractions.focus(input.inputElement);
-            input.value = '';
-            input.validate();
-            var error = getDom(input.root).querySelector('paper-input-error');
-            assert.ok(error, 'paper-input-error exists');
-            //assert.equal(getComputedStyle(error).display, 'none', 'error is not display:none');
-            assert.isFalse(error.invalid, 'invalid is false');
-            assert.notEqual(input.$['i18n-error'].msgid, 'tooShort');
-            assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
+      test('when min/max defined without required, min validation should not be triggered for empty value', function () {
+        var input = fixture('min4max8');
+        flush(function () {
+          MockInteractions.focus(input.inputElement);
+          input.value = '';
+          input.validate();
+          var error = getDom(input.root).querySelector('paper-input-error');
+          assert.ok(error, 'paper-input-error exists');
+          //assert.equal(getComputedStyle(error).display, 'none', 'error is not display:none');
+          assert.isFalse(error.invalid, 'invalid is false');
+          assert.notEqual(input.$['i18n-error'].msgid, 'tooShort');
+          assert.isUndefined(input.$['i18n-error'].msgid, 'errorMessage is not defined');
         });
       });
 
@@ -601,7 +622,7 @@
           done();
         });
       });
-    }); 
+    });
 
     suite('a11y', function () {
 
@@ -612,14 +633,14 @@
           assert.isTrue(inputEl.hasAttribute('aria-labelledby'));
           assert.equal(inputEl.getAttribute('aria-labelledby'), getDom(input.root).querySelector(
             'label').id, 'aria-labelledby points to the label');
-            done();
+          done();
         });
 
       });
 
       test('has aria-describedby for error message', function (done) {
         var input = fixture('required');
-        flush(function(){
+        flush(function () {
           input.validate();
           flush(function () {
             var inputEl = input.inputElement.inputElement;
@@ -627,9 +648,9 @@
             assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
               'paper-input-error').id, 'aria-describedby points to the error message');
             done();
-          });  
+          });
         })
-       
+
       });
 
       test('has aria-describedby for character counter', function (done) {
@@ -638,7 +659,7 @@
           var inputEl = input.inputElement.inputElement;
           assert.isTrue(inputEl.hasAttribute('aria-describedby'));
           assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
-              'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
+            'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
             'aria-describedby points to the character counter');
           done();
         });
@@ -650,7 +671,7 @@
           var inputEl = input.inputElement.inputElement;
           assert.isTrue(inputEl.hasAttribute('aria-describedby'));
           assert.equal(inputEl.getAttribute('aria-describedby'), getDom(input.root).querySelector(
-              'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
+            'paper-input-error').id + ' ' + getDom(input.root).querySelector('paper-input-char-counter').id,
             'aria-describedby points to the error message and character counter');
           done();
         });

@@ -10,6 +10,7 @@ import { PaperInputBehavior } from "@polymer/paper-input/paper-input-behavior.js
 import { IronFormElementBehavior } from "@polymer/iron-form-element-behavior/iron-form-element-behavior.js";
 import { IronValidatableBehavior } from "@polymer/iron-validatable-behavior/iron-validatable-behavior.js";
 import { OEFieldMixin } from "oe-mixins/oe-field-mixin.js";
+import { IronControlState } from "@polymer/iron-behaviors/iron-control-state.js";
 import DecimalMixin from "./oe-decimal-mixin.js";
 import "@polymer/paper-input/paper-input-char-counter.js";
 import "@polymer/paper-input/paper-input-container.js";
@@ -69,22 +70,46 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
                 @apply --paper-input-container-shared-input-style;
             }
 
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+              @apply --paper-input-container-input-webkit-spinner;
+            }
+      
+            input::-webkit-clear-button {
+              @apply --paper-input-container-input-webkit-clear;
+            }
+      
+            input::-webkit-calendar-picker-indicator {
+              @apply --paper-input-container-input-webkit-calendar-picker-indicator;
+            }
+      
+            input::-ms-clear {
+              @apply --paper-input-container-ms-clear;
+            }
+      
+            input::-ms-reveal {
+              @apply --paper-input-container-ms-reveal;
+            }
+            
             input::-webkit-input-placeholder {
-                color: var(--paper-input-container-color, --secondary-text-color);
+              color: var(--paper-input-container-color, var(--secondary-text-color));
             }
-    
+      
             input:-moz-placeholder {
-                color: var(--paper-input-container-color, --secondary-text-color);
+              color: var(--paper-input-container-color, var(--secondary-text-color));
             }
-    
+      
             input::-moz-placeholder {
-                color: var(--paper-input-container-color, --secondary-text-color);
+              color: var(--paper-input-container-color, var(--secondary-text-color));
             }
-    
+      
             input:-ms-input-placeholder {
-                color: var(--paper-input-container-color, --secondary-text-color);
+              color: var(--paper-input-container-color, var(--secondary-text-color));
             }
-    
+
+            label {
+                @apply --oe-label-mixin;
+            }
         </style>
         <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
             auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
@@ -123,6 +148,21 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
     get _focusableElement() {
         return PolymerElement ? this.inputElement._inputElement :
             this.inputElement;
+    }
+
+    /**
+     * Forward focus to inputElement. Overriden from IronControlState.
+     * Fix : set focused property only if the event is not from a slotted element.
+     */
+    _focusBlurHandler(event) {
+        if (!this.isLightDescendant(event.target)) {
+            IronControlState._focusBlurHandler.call(this, event);
+        }
+
+        // Forward the focus to the nested input.
+        if (this.focused && !this._shiftTabPressed && this._focusableElement) {
+            this._focusableElement.focus();
+        }
     }
 
 }
