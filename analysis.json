@@ -13,11 +13,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 131,
+              "line": 180,
               "column": 2
             },
             "end": {
-              "line": 134,
+              "line": 183,
               "column": 3
             }
           },
@@ -26,6 +26,52 @@
               "readOnly": true
             }
           }
+        },
+        {
+          "name": "invalid",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 161,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "preventCopyPaste",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 167,
+              "column": 6
+            },
+            "end": {
+              "line": 171,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
         }
       ],
       "methods": [
@@ -35,11 +81,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 142,
+              "line": 191,
               "column": 2
             },
             "end": {
-              "line": 152,
+              "line": 201,
               "column": 3
             }
           },
@@ -55,11 +101,76 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 158,
+              "line": 207,
               "column": 2
             },
             "end": {
-              "line": 161,
+              "line": 210,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_handleCopyPaste",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 211,
+              "column": 2
+            },
+            "end": {
+              "line": 215,
+              "column": 2
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "preventCopyPaste"
+            }
+          ]
+        },
+        {
+          "name": "_focusBlurHandler",
+          "description": "Forward focus to inputElement. Overriden from IronControlState.\nFix : set focused property only if the event is not from a slotted element.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 221,
+              "column": 2
+            },
+            "end": {
+              "line": 230,
+              "column": 3
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_displayChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 232,
+              "column": 2
+            },
+            "end": {
+              "line": 237,
               "column": 3
             }
           },
@@ -80,19 +191,65 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 45,
+          "line": 46,
           "column": 0
         },
         "end": {
-          "line": 163,
+          "line": 239,
           "column": 1
         }
       },
       "privacy": "public",
       "superclass": "HTMLElement",
       "name": "OeInput",
-      "attributes": [],
-      "events": [],
+      "attributes": [
+        {
+          "name": "invalid",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 161,
+              "column": 6
+            },
+            "end": {
+              "line": 166,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        },
+        {
+          "name": "prevent-copy-paste",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 167,
+              "column": 6
+            },
+            "end": {
+              "line": 171,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "invalid-changed",
+          "description": "Fired when the `invalid` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "prevent-copy-paste-changed",
+          "description": "Fired when the `preventCopyPaste` property changes.",
+          "metadata": {}
+        }
+      ],
       "styling": {
         "cssVariables": [],
         "selectors": []
@@ -240,11 +397,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 122,
+              "line": 147,
               "column": 4
             },
             "end": {
-              "line": 125,
+              "line": 150,
               "column": 5
             }
           },
@@ -449,7 +606,7 @@
               "column": 8
             },
             "end": {
-              "line": 328,
+              "line": 334,
               "column": 9
             }
           },
@@ -472,11 +629,11 @@
           "sourceRange": {
             "file": "oe-decimal-mixin.js",
             "start": {
-              "line": 334,
+              "line": 340,
               "column": 8
             },
             "end": {
-              "line": 341,
+              "line": 347,
               "column": 9
             }
           },
@@ -492,6 +649,50 @@
             "type": "void"
           },
           "inheritedFrom": "DecimalMixin"
+        },
+        {
+          "name": "_focusBlurHandler",
+          "description": "Forward focus to inputElement. Overriden from IronControlState.\nFix : set focused property only if the event is not from a slotted element.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 156,
+              "column": 4
+            },
+            "end": {
+              "line": 165,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "connectedCallback",
+          "description": "Iron-Input.inputElement remains undefined (looks like _initSlottedInput only for\nsubsequent dom-change)",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 171,
+              "column": 4
+            },
+            "end": {
+              "line": 174,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         }
       ],
       "staticMethods": [],
@@ -504,11 +705,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 46,
+          "line": 47,
           "column": 0
         },
         "end": {
-          "line": 127,
+          "line": 176,
           "column": 1
         }
       },
@@ -2485,6 +2686,476 @@
       ]
     },
     {
+      "description": "### oe-json-input\n\n`<oe-json-input>` is a control for multiline text input based on Polymer's `paper-textarea` control with following additional features.\n\n  1. control level validations\n  2. model-level/cross-field validations. When any UI control is placed on the form, the control needs to be 'aware' of 'which property' on the model it is bound to. This is required specially since, many times two or more controls take part in deciding the model validity. (cross-field-validations)\n  3. support internationalization of labels and error-messages out of box.\n  4. `oe-json-input` adds a little red-asterisk if the field is 'required'.\n\n\n### Styling\n\nThe following custom properties and mixins are available for styling:\n\nCSS Variable | Description | Default\n----------------|-------------|----------\n`--paper-input-container-invalid-color` | Color applied to asterisk indicating, required field | `--google-red-500`\n`--paper-input-container-color`         | Default container color        | `--secondary-text-color`",
+      "summary": "",
+      "path": "oe-json-input.js",
+      "properties": [
+        {
+          "name": "_focusableElement",
+          "type": "HTMLElement",
+          "description": "Returns a reference to the focusable element. Overridden from\nPaperInputBehavior to correctly focus the native textarea.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 198,
+              "column": 4
+            },
+            "end": {
+              "line": 200,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "inputElement",
+          "type": "?",
+          "description": "Returns a reference to the input element.\n     ",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 205,
+              "column": 4
+            },
+            "end": {
+              "line": 207,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "_ariaLabelledBy",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 12
+            },
+            "end": {
+              "line": 93,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_ariaLabelledByChanged\"",
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "_ariaDescribedBy",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 95,
+              "column": 12
+            },
+            "end": {
+              "line": 98,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_ariaDescribedByChanged\"",
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "rows",
+          "type": "number | null | undefined",
+          "description": "Inital number of rows of the textarea",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 103,
+              "column": 12
+            },
+            "end": {
+              "line": 106,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "1"
+        },
+        {
+          "name": "maxRows",
+          "type": "number | null | undefined",
+          "description": "Maximum number of rows the textarea can grow untill it scrolls.\n0 means no limit.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 112,
+              "column": 12
+            },
+            "end": {
+              "line": 115,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "Number"
+            }
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "displayValue",
+          "type": "string | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 117,
+              "column": 12
+            },
+            "end": {
+              "line": 119,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "attributeType": "String"
+            }
+          }
+        },
+        {
+          "name": "value",
+          "type": "Object | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 121,
+              "column": 12
+            },
+            "end": {
+              "line": 125,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "observer": "\"_valueChanged\"",
+              "attributeType": "Object"
+            }
+          }
+        },
+        {
+          "name": "invalid",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 126,
+              "column": 12
+            },
+            "end": {
+              "line": 131,
+              "column": 13
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
+        }
+      ],
+      "methods": [
+        {
+          "name": "_displayChanged",
+          "description": "Parses the entered input as JSON and validates",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 138,
+              "column": 4
+            },
+            "end": {
+              "line": 147,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_valueChanged",
+          "description": "Displays the prettified JSON value",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 152,
+              "column": 4
+            },
+            "end": {
+              "line": 175,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "nVal"
+            },
+            {
+              "name": "oVal"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_validate",
+          "description": "Validates if the entered value is a valid JSON object.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 180,
+              "column": 4
+            },
+            "end": {
+              "line": 190,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_ariaLabelledByChanged",
+          "description": "Set aria-labelledby on the textarea within iron-autogrow-textarea",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 214,
+              "column": 4
+            },
+            "end": {
+              "line": 216,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "ariaLabelledBy",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_ariaDescribedByChanged",
+          "description": "Set aria-describedby on the textarea within iron-autogrow-textarea",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 222,
+              "column": 4
+            },
+            "end": {
+              "line": 224,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "ariaDescribedBy",
+              "type": "string"
+            }
+          ],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "connectedCallback",
+          "description": "Attaches change event listener on inputElement",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 230,
+              "column": 4
+            },
+            "end": {
+              "line": 233,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/demo-oe-json-input.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 43,
+          "column": 0
+        },
+        "end": {
+          "line": 234,
+          "column": 1
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "OeJsonInput",
+      "attributes": [
+        {
+          "name": "rows",
+          "description": "Inital number of rows of the textarea",
+          "sourceRange": {
+            "start": {
+              "line": 103,
+              "column": 12
+            },
+            "end": {
+              "line": 106,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "max-rows",
+          "description": "Maximum number of rows the textarea can grow untill it scrolls.\n0 means no limit.",
+          "sourceRange": {
+            "start": {
+              "line": 112,
+              "column": 12
+            },
+            "end": {
+              "line": 115,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "number | null | undefined"
+        },
+        {
+          "name": "display-value",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 117,
+              "column": 12
+            },
+            "end": {
+              "line": 119,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "string | null | undefined"
+        },
+        {
+          "name": "value",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 121,
+              "column": 12
+            },
+            "end": {
+              "line": 125,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "Object | null | undefined"
+        },
+        {
+          "name": "invalid",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 126,
+              "column": 12
+            },
+            "end": {
+              "line": 131,
+              "column": 13
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "value-changed",
+          "description": "Fired when the `value` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "invalid-changed",
+          "description": "Fired when the `invalid` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "oe-json-input",
+      "mixins": [
+        "OEFieldMixin"
+      ]
+    },
+    {
       "description": "### oe-input-masked\n\n`<oe-input-masked>` is a control for text input based on `oe-input`control with following additional features.\n\n  1. mask the each char with a specified char, based on a RegExp pattern\n  2. mask the each matched pattern with a specified string, based on a RegExp pattern\n  3. add specified number of mask char(s) at the end of the specified input.",
       "summary": "",
       "path": "oe-input-masked.js",
@@ -2555,16 +3226,36 @@
           }
         },
         {
+          "name": "_displayChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 147,
+              "column": 4
+            },
+            "end": {
+              "line": 152,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
           "name": "connectedCallback",
           "description": "Connected Callback to initiate event listeners.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 151,
+              "line": 157,
               "column": 4
             },
             "end": {
-              "line": 158,
+              "line": 164,
               "column": 5
             }
           },
@@ -2580,11 +3271,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 165,
+              "line": 171,
               "column": 4
             },
             "end": {
-              "line": 229,
+              "line": 235,
               "column": 5
             }
           },
@@ -2605,11 +3296,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 234,
+              "line": 240,
               "column": 4
             },
             "end": {
-              "line": 237,
+              "line": 243,
               "column": 5
             }
           },
@@ -2629,11 +3320,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 242,
+              "line": 248,
               "column": 4
             },
             "end": {
-              "line": 245,
+              "line": 251,
               "column": 5
             }
           },
@@ -2653,11 +3344,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 253,
+              "line": 259,
               "column": 4
             },
             "end": {
-              "line": 258,
+              "line": 264,
               "column": 5
             }
           },
@@ -2698,7 +3389,7 @@
           "column": 0
         },
         "end": {
-          "line": 260,
+          "line": 266,
           "column": 1
         }
       },
@@ -2736,431 +3427,6 @@
       ]
     },
     {
-      "description": "### oe-json-input\n\n`<oe-json-input>` is a control for multiline text input based on Polymer's `paper-textarea` control with following additional features.\n\n  1. control level validations\n  2. model-level/cross-field validations. When any UI control is placed on the form, the control needs to be 'aware' of 'which property' on the model it is bound to. This is required specially since, many times two or more controls take part in deciding the model validity. (cross-field-validations)\n  3. support internationalization of labels and error-messages out of box.\n  4. `oe-json-input` adds a little red-asterisk if the field is 'required'.\n\n\n### Styling\n\nThe following custom properties and mixins are available for styling:\n\nCSS Variable | Description | Default\n----------------|-------------|----------\n`--paper-input-container-invalid-color` | Color applied to asterisk indicating, required field | `--google-red-500`\n`--paper-input-container-color`         | Default container color        | `--secondary-text-color`",
-      "summary": "",
-      "path": "oe-json-input.js",
-      "properties": [
-        {
-          "name": "_focusableElement",
-          "type": "HTMLElement",
-          "description": "Returns a reference to the focusable element. Overridden from\nPaperInputBehavior to correctly focus the native textarea.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 192,
-              "column": 4
-            },
-            "end": {
-              "line": 194,
-              "column": 5
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "readOnly": true
-            }
-          }
-        },
-        {
-          "name": "inputElement",
-          "type": "?",
-          "description": "Returns a reference to the input element.\n     ",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 199,
-              "column": 4
-            },
-            "end": {
-              "line": 201,
-              "column": 5
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "readOnly": true
-            }
-          }
-        },
-        {
-          "name": "_ariaLabelledBy",
-          "type": "string | null | undefined",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 89,
-              "column": 12
-            },
-            "end": {
-              "line": 92,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_ariaLabelledByChanged\"",
-              "attributeType": "String"
-            }
-          }
-        },
-        {
-          "name": "_ariaDescribedBy",
-          "type": "string | null | undefined",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 94,
-              "column": 12
-            },
-            "end": {
-              "line": 97,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_ariaDescribedByChanged\"",
-              "attributeType": "String"
-            }
-          }
-        },
-        {
-          "name": "rows",
-          "type": "number | null | undefined",
-          "description": "Inital number of rows of the textarea",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 102,
-              "column": 12
-            },
-            "end": {
-              "line": 105,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "attributeType": "Number"
-            }
-          },
-          "defaultValue": "1"
-        },
-        {
-          "name": "maxRows",
-          "type": "number | null | undefined",
-          "description": "Maximum number of rows the textarea can grow untill it scrolls.\n0 means no limit.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 111,
-              "column": 12
-            },
-            "end": {
-              "line": 114,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "attributeType": "Number"
-            }
-          },
-          "defaultValue": "0"
-        },
-        {
-          "name": "displayValue",
-          "type": "string | null | undefined",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 116,
-              "column": 12
-            },
-            "end": {
-              "line": 118,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "attributeType": "String"
-            }
-          }
-        },
-        {
-          "name": "value",
-          "type": "Object | null | undefined",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 120,
-              "column": 12
-            },
-            "end": {
-              "line": 124,
-              "column": 13
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true,
-              "observer": "\"_valueChanged\"",
-              "attributeType": "Object"
-            }
-          }
-        }
-      ],
-      "methods": [
-        {
-          "name": "_displayChanged",
-          "description": "Parses the entered input as JSON and validates",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 132,
-              "column": 4
-            },
-            "end": {
-              "line": 141,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "e"
-            }
-          ],
-          "return": {
-            "type": "void"
-          }
-        },
-        {
-          "name": "_valueChanged",
-          "description": "Displays the prettified JSON value",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 146,
-              "column": 4
-            },
-            "end": {
-              "line": 169,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "nVal"
-            },
-            {
-              "name": "oVal"
-            }
-          ],
-          "return": {
-            "type": "void"
-          }
-        },
-        {
-          "name": "_validate",
-          "description": "Validates if the entered value is a valid JSON object.",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 174,
-              "column": 4
-            },
-            "end": {
-              "line": 184,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_ariaLabelledByChanged",
-          "description": "Set aria-labelledby on the textarea within iron-autogrow-textarea",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 208,
-              "column": 4
-            },
-            "end": {
-              "line": 210,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "ariaLabelledBy",
-              "type": "string"
-            }
-          ],
-          "return": {
-            "type": "void"
-          }
-        },
-        {
-          "name": "_ariaDescribedByChanged",
-          "description": "Set aria-describedby on the textarea within iron-autogrow-textarea",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 216,
-              "column": 4
-            },
-            "end": {
-              "line": 218,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "ariaDescribedBy",
-              "type": "string"
-            }
-          ],
-          "return": {
-            "type": "void"
-          }
-        },
-        {
-          "name": "connectedCallback",
-          "description": "Attaches change event listener on inputElement",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 224,
-              "column": 4
-            },
-            "end": {
-              "line": 227,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "return": {
-            "type": "void"
-          }
-        }
-      ],
-      "staticMethods": [],
-      "demos": [
-        {
-          "url": "demo/demo-oe-json-input.html",
-          "description": ""
-        }
-      ],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 43,
-          "column": 0
-        },
-        "end": {
-          "line": 228,
-          "column": 1
-        }
-      },
-      "privacy": "public",
-      "superclass": "HTMLElement",
-      "name": "OeJsonInput",
-      "attributes": [
-        {
-          "name": "rows",
-          "description": "Inital number of rows of the textarea",
-          "sourceRange": {
-            "start": {
-              "line": 102,
-              "column": 12
-            },
-            "end": {
-              "line": 105,
-              "column": 13
-            }
-          },
-          "metadata": {},
-          "type": "number | null | undefined"
-        },
-        {
-          "name": "max-rows",
-          "description": "Maximum number of rows the textarea can grow untill it scrolls.\n0 means no limit.",
-          "sourceRange": {
-            "start": {
-              "line": 111,
-              "column": 12
-            },
-            "end": {
-              "line": 114,
-              "column": 13
-            }
-          },
-          "metadata": {},
-          "type": "number | null | undefined"
-        },
-        {
-          "name": "display-value",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 116,
-              "column": 12
-            },
-            "end": {
-              "line": 118,
-              "column": 13
-            }
-          },
-          "metadata": {},
-          "type": "string | null | undefined"
-        },
-        {
-          "name": "value",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 120,
-              "column": 12
-            },
-            "end": {
-              "line": 124,
-              "column": 13
-            }
-          },
-          "metadata": {},
-          "type": "Object | null | undefined"
-        }
-      ],
-      "events": [
-        {
-          "type": "CustomEvent",
-          "name": "value-changed",
-          "description": "Fired when the `value` property changes.",
-          "metadata": {}
-        }
-      ],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "oe-json-input",
-      "mixins": [
-        "OEFieldMixin"
-      ]
-    },
-    {
       "description": "### oe-textarea\n\n`<oe-textarea>` is a control for multiline text input based on Polymer's `paper-textarea` control with following additional features.\n\n  1. control level validations\n  2. model-level/cross-field validations. When any UI control is placed on the form, the control needs to be 'aware' of 'which property' on the model it is bound to. This is required specially since, many times two or more controls take part in deciding the model validity. (cross-field-validations)\n  3. support internationalization of labels and error-messages out of box.\n  4. `oe-textarea` adds a little red-asterisk if the field is 'required'.\n\n    <oe-textarea required field-id=\"accountName\" label=\"Account Name\"></oe-textarea>\n\n### Styling\n\nThe following custom properties and mixins are available for styling:\n\nCSS Variable | Description | Default\n----------------|-------------|----------\n`--paper-input-container-invalid-color` | Color applied to asterisk indicating, required field | `--google-red-500`\n`--paper-input-container-color`         | Default container color        | `--secondary-text-color`",
       "summary": "",
       "path": "oe-textarea.js",
@@ -3170,27 +3436,6 @@
           "type": "HTMLElement",
           "description": "Returns a reference to the focusable element. Overridden from\nPaperInputBehavior to correctly focus the native textarea.",
           "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 127,
-              "column": 4
-            },
-            "end": {
-              "line": 129,
-              "column": 5
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "readOnly": true
-            }
-          }
-        },
-        {
-          "name": "inputElement",
-          "type": "HTMLElement",
-          "description": "Returns a reference to the focusable element. Overridden from\nPaperInputBehavior to correctly focus the native textarea.",
-          "privacy": "public",
           "sourceRange": {
             "start": {
               "line": 138,
@@ -3208,17 +3453,38 @@
           }
         },
         {
+          "name": "inputElement",
+          "type": "HTMLElement",
+          "description": "Returns a reference to the focusable element. Overridden from\nPaperInputBehavior to correctly focus the native textarea.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 149,
+              "column": 4
+            },
+            "end": {
+              "line": 151,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
           "name": "_ariaLabelledBy",
           "type": "string | null | undefined",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 92,
+              "line": 97,
               "column": 12
             },
             "end": {
-              "line": 95,
+              "line": 100,
               "column": 13
             }
           },
@@ -3236,11 +3502,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 97,
+              "line": 102,
               "column": 12
             },
             "end": {
-              "line": 100,
+              "line": 105,
               "column": 13
             }
           },
@@ -3258,11 +3524,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 105,
+              "line": 110,
               "column": 12
             },
             "end": {
-              "line": 108,
+              "line": 113,
               "column": 13
             }
           },
@@ -3280,11 +3546,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 113,
+              "line": 118,
               "column": 12
             },
             "end": {
-              "line": 116,
+              "line": 121,
               "column": 13
             }
           },
@@ -3294,20 +3560,83 @@
             }
           },
           "defaultValue": "0"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean | null | undefined",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 122,
+              "column": 12
+            },
+            "end": {
+              "line": 127,
+              "column": 15
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "attributeType": "Boolean"
+            }
+          },
+          "defaultValue": "false"
         }
       ],
       "methods": [
+        {
+          "name": "connectedCallback",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 153,
+              "column": 4
+            },
+            "end": {
+              "line": 156,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "_displayChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 158,
+              "column": 4
+            },
+            "end": {
+              "line": 163,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [],
+          "return": {
+            "type": "void"
+          }
+        },
         {
           "name": "_ariaLabelledByChanged",
           "description": "Set aria-labelledby on the textarea within iron-autogrow-textarea",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 146,
+              "line": 169,
               "column": 4
             },
             "end": {
-              "line": 148,
+              "line": 171,
               "column": 5
             }
           },
@@ -3328,11 +3657,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 154,
+              "line": 177,
               "column": 4
             },
             "end": {
-              "line": 156,
+              "line": 179,
               "column": 5
             }
           },
@@ -3362,7 +3691,7 @@
           "column": 0
         },
         "end": {
-          "line": 158,
+          "line": 181,
           "column": 1
         }
       },
@@ -3375,11 +3704,11 @@
           "description": "Inital number of rows of the textarea",
           "sourceRange": {
             "start": {
-              "line": 105,
+              "line": 110,
               "column": 12
             },
             "end": {
-              "line": 108,
+              "line": 113,
               "column": 13
             }
           },
@@ -3391,19 +3720,42 @@
           "description": "Maximum number of rows the textarea can grow untill it scrolls.\n0 means no limit.",
           "sourceRange": {
             "start": {
-              "line": 113,
+              "line": 118,
               "column": 12
             },
             "end": {
-              "line": 116,
+              "line": 121,
               "column": 13
             }
           },
           "metadata": {},
           "type": "number | null | undefined"
+        },
+        {
+          "name": "invalid",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 122,
+              "column": 12
+            },
+            "end": {
+              "line": 127,
+              "column": 15
+            }
+          },
+          "metadata": {},
+          "type": "boolean | null | undefined"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "invalid-changed",
+          "description": "Fired when the `invalid` property changes.",
+          "metadata": {}
+        }
+      ],
       "styling": {
         "cssVariables": [],
         "selectors": []
@@ -3716,7 +4068,7 @@
               "column": 8
             },
             "end": {
-              "line": 328,
+              "line": 334,
               "column": 9
             }
           },
@@ -3737,11 +4089,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 334,
+              "line": 340,
               "column": 8
             },
             "end": {
-              "line": 341,
+              "line": 347,
               "column": 9
             }
           },
@@ -3767,7 +4119,7 @@
           "column": 0
         },
         "end": {
-          "line": 343,
+          "line": 349,
           "column": 2
         }
       },
