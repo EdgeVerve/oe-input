@@ -125,7 +125,13 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
                 value: false, 
                 notify: true,
                 reflectToAttribute: true
-              }
+            }
+
+            /**
+             * Fired when the value of the field is changed by the user
+             *
+             * @event oe-field-changed
+             */
         };
     }
 

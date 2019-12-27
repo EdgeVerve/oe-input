@@ -4,12 +4,25 @@
  * Bangalore, India. All Rights Reserved.
  */
 
-import { html, PolymerElement } from "@polymer/polymer/polymer-element.js";
-import { mixinBehaviors } from "@polymer/polymer/lib/legacy/class.js";
-import { PaperInputBehavior } from "@polymer/paper-input/paper-input-behavior.js";
-import { IronFormElementBehavior } from "@polymer/iron-form-element-behavior/iron-form-element-behavior.js";
-import { IronControlState } from "@polymer/iron-behaviors/iron-control-state";
-import { OEFieldMixin } from "oe-mixins/oe-field-mixin.js";
+import {
+  html,
+  PolymerElement
+} from "@polymer/polymer/polymer-element.js";
+import {
+  mixinBehaviors
+} from "@polymer/polymer/lib/legacy/class.js";
+import {
+  PaperInputBehavior
+} from "@polymer/paper-input/paper-input-behavior.js";
+import {
+  IronFormElementBehavior
+} from "@polymer/iron-form-element-behavior/iron-form-element-behavior.js";
+import {
+  IronControlState
+} from "@polymer/iron-behaviors/iron-control-state";
+import {
+  OEFieldMixin
+} from "oe-mixins/oe-field-mixin.js";
 import "@polymer/paper-input/paper-input-char-counter.js";
 import "@polymer/paper-input/paper-input-container.js";
 import "@polymer/paper-input/paper-input-error.js";
@@ -45,10 +58,12 @@ import "oe-i18n-msg/oe-i18n-msg.js";
  * @demo demo/demo-oe-input.html
  */
 class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavior], PolymerElement) {
-  static get is() { return 'oe-input'; }
+  static get is() {
+    return 'oe-input';
+  }
 
   static get template() {
-    return html`
+    return html `
       <style>
         :host {
           display: block;
@@ -161,17 +176,25 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
     return {
       invalid: {
         type: Boolean,
-        value: false, 
+        value: false,
         notify: true,
         reflectToAttribute: true
       },
+
+      /** Prevents the user from copying or pasting in the component */
       preventCopyPaste: {
         type: Boolean,
         notify: true,
-	value:false
+        value: false
       }
-      }
+
+      /**
+       * Fired when the value of the field is changed by the user
+       *
+       * @event oe-field-changed
+       */
     }
+  }
   /**
    * Returns a reference to the focusable element. Overridden from
    * PaperInputBehavior to correctly focus the native input.
@@ -209,34 +232,37 @@ class OeInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBehavio
     super.connectedCallback();
     this.addEventListener('change', e => this.validate(e));
   }
-  _handleCopyPaste (preventCopyPaste){
-    if(preventCopyPaste){
-       return "return false";
+  _handleCopyPaste(preventCopyPaste) {
+    if (preventCopyPaste) {
+      return "return false";
     }
- }
- 
+  }
+
   /**
    * Forward focus to inputElement. Overriden from IronControlState.
    * Fix : set focused property only if the event is not from a slotted element.
    */
   _focusBlurHandler(event) {
-    if(!this.isLightDescendant(event.target)){
+    if (!this.isLightDescendant(event.target)) {
       IronControlState._focusBlurHandler.call(this, event);
     }
-    
+
     // Forward the focus to the nested input.
     if (this.focused && !this._shiftTabPressed && this._focusableElement) {
       this._focusableElement.focus();
     }
   }
 
-  _displayChanged(){
+  _displayChanged() {
     var status = this.validate();
-    if(status && this.fieldId) {
-      this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+    if (status && this.fieldId) {
+      this.fire('oe-field-changed', {
+        'fieldId': this.fieldId,
+        'value': this.value
+      });
     }
   }
-  
+
 }
 
 window.customElements.define(OeInput.is, OEFieldMixin(OeInput));

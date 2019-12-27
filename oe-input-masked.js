@@ -109,6 +109,12 @@ class OeInputMasked extends mixinBehaviors([IronFormElementBehavior, PaperInputB
             display: {
                 type: String
             }
+            
+            /**
+             * Fired when the value of the field is changed by the user
+             *
+             * @event oe-field-changed
+             */
         };
     }
 
