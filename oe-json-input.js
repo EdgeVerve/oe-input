@@ -56,10 +56,11 @@ class OeJsonInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBeh
                 @apply --oe-required-mixin;
             }
 
-            iron-autogrow-textarea{
-                --iron-autogrow-textarea:{
-                    padding:0px;
-                }
+            label{
+                @apply --oe-label-mixin;
+            }
+            paper-input-error{
+                @apply --oe-input-error;
             }
         </style>
         <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
@@ -73,7 +74,7 @@ class OeJsonInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBeh
             <iron-autogrow-textarea slot="input" id="input" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]"  class="paper-input-input" bind-value="{{displayValue}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
                 autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" name$="[[name]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
                 required$="[[required]]" maxlength$="[[maxlength]]" autocapitalize$="[[autocapitalize]]" rows$="[[rows]]" max-rows$="[[maxRows]]"
-                on-change="_displayChanged" tabindex$="[[tabindex]]">
+                on-change="_displayChanged" tabindex$="[[tabindex]]" invalid="[[invalid]]">
             </iron-autogrow-textarea>
             <paper-input-error invalid={{invalid}} slot="add-on">
                 <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
@@ -122,8 +123,13 @@ class OeJsonInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBeh
                 type: Object,
                 notify: true,
                 observer: '_valueChanged'
+            },
+            invalid: {
+                type: Boolean,
+                value: false,
+                notify: true,
+                reflectToAttribute: true
             }
-
         };
     }
 

@@ -304,7 +304,6 @@ const DecimalMixin = function (BaseClass) {
          * @param {Event} evt 
          */
         _displayChanged(evt) { // eslint-disable-line no-unused-vars
-
             let newstr = this.inputElement.value;
             newstr = newstr.trim();
             if (newstr !== '') {
@@ -330,7 +329,9 @@ const DecimalMixin = function (BaseClass) {
                 this.value = undefined;
                 this.inputElement.bindValue = '';
             }
-            this.validate();
+            if(this.fieldId){
+              this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+            }
         }
 
         /**

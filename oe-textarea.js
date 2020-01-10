@@ -79,7 +79,7 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
             <iron-autogrow-textarea slot="input" id="input" class="paper-input-input" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" bind-value="{{value}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
                 autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
                 required$="[[required]]" maxlength$="[[maxlength]]" autocapitalize$="[[autocapitalize]]" rows$="[[rows]]" max-rows$="[[maxRows]]"
-                on-value-changed="validate" invalid="{{invalid}}" tabindex$="[[tabindex]]">
+                invalid="{{invalid}}" tabindex$="[[tabindex]]">
             </iron-autogrow-textarea>
             <paper-input-error invalid={{invalid}} slot="add-on">
                 <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
@@ -125,7 +125,13 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
                 value: false, 
                 notify: true,
                 reflectToAttribute: true
-              }
+            }
+
+            /**
+             * Fired when the value of the field is changed by the user
+             *
+             * @event oe-field-changed
+             */
         };
     }
 
@@ -149,6 +155,18 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
      */
     get inputElement() {
         return this.$.input.textarea;
+    }
+
+    connectedCallback(){
+      super.connectedCallback();
+      this.inputElement.addEventListener('change', this._displayChanged.bind(this));
+    }
+    
+    _displayChanged(){
+      var status = this.validate();
+      if(status && this.fieldId) {
+        this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+      }
     }
 
     /**
