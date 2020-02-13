@@ -14,7 +14,7 @@ import "@polymer/paper-input/paper-input-container.js";
 import "@polymer/paper-input/paper-input-error.js";
 import "@polymer/iron-autogrow-textarea/iron-autogrow-textarea.js";
 import "oe-i18n-msg/oe-i18n-msg.js";
-
+import inputStyles from "./oe-input-styles";
 /**
  * ### oe-json-input
  * 
@@ -47,21 +47,7 @@ class OeJsonInput extends mixinBehaviors([IronFormElementBehavior, PaperInputBeh
     static get template() {
         return html`
         <style>
-            :host {
-                display: block;
-            }
-            span.required {
-                vertical-align: bottom;
-                color: var(--paper-input-container-invalid-color, var(--google-red-500));
-                @apply --oe-required-mixin;
-            }
-
-            label{
-                @apply --oe-label-mixin;
-            }
-            paper-input-error{
-                @apply --oe-input-error;
-            }
+            ${inputStyles}
         </style>
         <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
             auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
