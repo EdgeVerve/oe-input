@@ -80,7 +80,17 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
         </paper-input-container>
         `;
     }
-
+    static get properties() {
+        return {
+    
+          invalid: {
+            type: Boolean,
+            value: false, 
+            notify: true,
+            reflectToAttribute: true
+          }
+          }
+        }
     /**
      * Returns a reference to the focusable element. Overridden from
      * PaperInputBehavior to correctly focus the native input.
