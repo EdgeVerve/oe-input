@@ -145,6 +145,11 @@
       </oe-input>
     </template>
   </test-fixture>
+  <test-fixture id="preventCopyPaste">
+    <template>
+      <oe-input prevent-copy-paste></oe-input>
+    </template>
+  </test-fixture>
 
 
   <script type="module">
@@ -624,6 +629,54 @@
       });
     });
 
+    suite('oe-events', function() {
+      test('change event is triggered', function(done){
+        var input = fixture('basic');
+        input.set('fieldId', 'myfield');
+
+        input.addEventListener('oe-field-changed', function(evt){
+          expect(evt.detail).to.deep.equal({fieldId: 'myfield', value: 'Lorem Ipsum'});
+          done();
+        });
+        MockInteractions.focus(input.inputElement);
+        input.set('value', 'Lorem Ipsum');
+        input.inputElement.fire('change');
+        MockInteractions.blur(input.inputElement);
+      });
+
+      test('change event is NOT triggered if fieldid is missing', function(done){
+        var input = fixture('basic');
+
+        input.addEventListener('oe-field-changed', function(evt){
+          /*Should not be called, 
+          we are not expecting field-changed event to be fired */
+          expect(true).to.be.false;
+          done();
+        });
+        MockInteractions.focus(input.inputElement);
+        input.set('value', 'Lorem Ipsum');
+        input.inputElement.fire('change');
+        MockInteractions.blur(input.inputElement);
+
+        setTimeout(done, 2000);
+      });
+
+      test('change event is NOT triggered if value changes', function(done){
+        var input = fixture('basic');
+        input.set('fieldId', 'myfield');
+        // input.set('autoValidate', true);
+
+        input.addEventListener('oe-field-changed', function(evt){
+          /*Should not be called, 
+          we are not expecting field-changed event to be fired */
+          expect(true).to.be.false;
+          done();
+        });
+        input.set('value', 'Lorem Ipsum');
+        setTimeout(done, 2000);
+      });
+    });
+
     suite('a11y', function () {
 
       test('has aria-labelledby', function (done) {
@@ -686,6 +739,16 @@
               document.activeElement, input._focusableElement);
             done();
           });
+        });
+      });
+
+      test('prevent copy paste', function (done) {
+        var input = fixture('preventCopyPaste');
+        flush(function () {
+          var inputEle = input.inputElement.inputElement;
+          assert.equal(inputEle.getAttribute('onpaste'),"return false");
+          assert.equal(inputEle.getAttribute('oncopy'),"return false");
+          done();
         });
       });
     });

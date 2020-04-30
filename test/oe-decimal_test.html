@@ -27,6 +27,13 @@
         </template>
     </test-fixture>
 
+    <test-fixture id="basic2">
+        <template>
+            <oe-decimal></oe-decimal>
+        </template>
+    </test-fixture>
+
+
     <test-fixture id="basic-p2">
         <template>
             <oe-decimal precision="2"></oe-decimal>
@@ -535,6 +542,54 @@
             });
 
         });
+
+        suite('oe-events', function() {
+      
+          test('change event is triggered', function(done){
+        var input = fixture('basic');
+        input.set('fieldId', 'myfield');
+
+        input.addEventListener('oe-field-changed', function(evt){
+          expect(evt.detail).to.deep.equal({fieldId: 'myfield', value: 10000});
+          done();
+        });
+        MockInteractions.focus(input.inputElement);
+        input.set('value', 10000);
+        input.inputElement.fire('change');
+        MockInteractions.blur(input.inputElement);
+      });
+
+      test('change event is NOT triggered if fieldid is missing', function(done){
+        var input = fixture('basic');
+
+        input.addEventListener('oe-field-changed', function(evt){
+          expect(true).to.be.false;
+          done();
+        });
+        MockInteractions.focus(input.inputElement);
+        input.set('value', 10000);
+        input.inputElement.fire('change');
+        MockInteractions.blur(input.inputElement);
+
+        setTimeout(done, 2000);
+      });
+
+      test('change event is NOT triggered if value changes', function(done){
+        var input = fixture('basic');
+        input.set('fieldId', 'onlyValueChange');
+
+        input.addEventListener('oe-field-changed', function(evt){
+          expect(true).to.be.false;
+          done();
+        });
+        input.addEventListener('oe-field-ok', function(evt){
+          expect(evt.detail.fieldId).to.equal('onlyValueChange');
+          setTimeout(done, 2000);
+        });
+        input.set('value', 10000);
+      });
+    });
+
         suite('a11y', function () {
       
 

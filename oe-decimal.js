@@ -133,7 +133,7 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
                 <slot name="suffix" slot="suffix"></slot>
             </template>
             <paper-input-error invalid={{invalid}} slot="add-on">
-                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
             </paper-input-error>
         </paper-input-container>
         `;
@@ -163,6 +163,15 @@ class OeDecimal extends mixinBehaviors([IronFormElementBehavior, IronValidatable
         if (this.focused && !this._shiftTabPressed && this._focusableElement) {
             this._focusableElement.focus();
         }
+    }
+
+    /**
+     * Iron-Input.inputElement remains undefined (looks like _initSlottedInput only for 
+     * subsequent dom-change) 
+     */
+    connectedCallback(){
+      super.connectedCallback();
+      this.inputElement._initSlottedInput();
     }
 
 }

@@ -55,12 +55,17 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
                 color: var(--paper-input-container-invalid-color, var(--google-red-500));
                 @apply --oe-required-mixin;
             }
-
-            iron-autogrow-textarea{
-                --iron-autogrow-textarea:{
-                    padding:0px;
-                }
-            }
+            
+            label{
+                @apply --oe-label-mixin;
+              }
+              paper-input-char-counter{
+                @apply --oe-input-char-counter;
+              }
+              paper-input-error{
+                @apply --oe-input-error;
+              }
+              
         </style>
         <paper-input-container no-label-float$="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
             auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
@@ -74,10 +79,10 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
             <iron-autogrow-textarea slot="input" id="input" class="paper-input-input" aria-required$="[[required]]" aria-labelledby$="[[_ariaLabelledBy]]" aria-describedby$="[[_ariaDescribedBy]]" bind-value="{{value}}" disabled$="[[disabled]]" autocomplete$="[[autocomplete]]"
                 autofocus$="[[autofocus]]" inputmode$="[[inputmode]]" placeholder$="[[placeholder]]" readonly$="[[readonly]]"
                 required$="[[required]]" maxlength$="[[maxlength]]" autocapitalize$="[[autocapitalize]]" rows$="[[rows]]" max-rows$="[[maxRows]]"
-                on-change="validate" tabindex$="[[tabindex]]">
+                invalid="{{invalid}}" tabindex$="[[tabindex]]">
             </iron-autogrow-textarea>
             <paper-input-error invalid={{invalid}} slot="add-on">
-                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+                <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
             </paper-input-error>
             <template is="dom-if" if="[[charCounter]]">
                 <paper-input-char-counter slot="add-on"></paper-input-char-counter>
@@ -114,7 +119,19 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
             maxRows: {
                 type: Number,
                 value: 0
+            },
+            invalid: {
+                type: Boolean,
+                value: false, 
+                notify: true,
+                reflectToAttribute: true
             }
+
+            /**
+             * Fired when the value of the field is changed by the user
+             *
+             * @event oe-field-changed
+             */
         };
     }
 
@@ -138,6 +155,18 @@ class OeTextarea extends mixinBehaviors([IronFormElementBehavior, PaperInputBeha
      */
     get inputElement() {
         return this.$.input.textarea;
+    }
+
+    connectedCallback(){
+      super.connectedCallback();
+      this.inputElement.addEventListener('change', this._displayChanged.bind(this));
+    }
+    
+    _displayChanged(){
+      var status = this.validate();
+      if(status && this.fieldId) {
+        this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+      }
     }
 
     /**

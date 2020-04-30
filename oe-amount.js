@@ -94,7 +94,7 @@ class OeAmount extends mixinBehaviors([IronFormElementBehavior], OECommonMixin(P
       </div>
       <slot slot="suffix" name="suffix"></slot>
       <paper-input-error invalid={{invalid}} slot="add-on">
-        <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{placeholders}}></oe-i18n-msg>
+        <oe-i18n-msg id="i18n-error" msgid={{errorMessage}} placeholders={{errorPlaceholders}}></oe-i18n-msg>
       </paper-input-error>
 
 </paper-input-container>

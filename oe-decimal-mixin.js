@@ -279,7 +279,7 @@ const DecimalMixin = function (BaseClass) {
          * Observer called on value changed to format the input value
          */
         _valueChanged(newValue, oldValue) { // eslint-disable-line no-unused-vars
-
+           
             if(this.value === invalidValue){
                 return;
             }
@@ -304,7 +304,6 @@ const DecimalMixin = function (BaseClass) {
          * @param {Event} evt 
          */
         _displayChanged(evt) { // eslint-disable-line no-unused-vars
-
             let newstr = this.inputElement.value;
             newstr = newstr.trim();
             if (newstr !== '') {
@@ -319,13 +318,20 @@ const DecimalMixin = function (BaseClass) {
                 //divide by 100 if entered value is a percentage
                 number = this.percentage ? number / 100 : number;
 
-                this.set('value', number);
+                if(this.value !== number){
+                    this.set('value', number);
+                  }
+                  else{
+                    this._valueChanged(number,this.value);
+                  }
                 //this.inputElement.bindValue = this._format(number);
             } else {
                 this.value = undefined;
                 this.inputElement.bindValue = '';
             }
-            this.validate();
+            if(this.fieldId){
+              this.fire('oe-field-changed', {fieldId: this.fieldId, value: this.value});
+            }
         }
 
         /**
