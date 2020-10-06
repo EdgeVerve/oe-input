@@ -15,7 +15,7 @@ import "@polymer/paper-input/paper-input-container.js";
 import "@polymer/paper-input/paper-input-error.js";
 import "@polymer/iron-input/iron-input.js";
 import "oe-i18n-msg/oe-i18n-msg.js";
-
+import inputStyles from "./oe-input-styles";
 
 
 /**
@@ -39,41 +39,7 @@ class OeInputMasked extends mixinBehaviors([IronFormElementBehavior, PaperInputB
     static get template() {
         return html`
       <style>
-        :host {
-            display: block;
-        }
-        span.required {
-            vertical-align: bottom;
-            color: var(--paper-input-container-invalid-color, var(--google-red-500));
-            @apply --oe-required-mixin;
-        }
-
-        paper-input-container {
-            display: inline-block;
-            width: calc(100% - 10px);
-        }
-        input{
-            @apply --paper-input-container-shared-input-style;
-        }
-        input::-webkit-input-placeholder {
-            color: var(--paper-input-container-color, --secondary-text-color);
-        }
-
-        input:-moz-placeholder {
-            color: var(--paper-input-container-color, --secondary-text-color);
-        }
-
-        input::-moz-placeholder {
-            color: var(--paper-input-container-color, --secondary-text-color);
-        }
-
-        input:-ms-input-placeholder {
-            color: var(--paper-input-container-color, --secondary-text-color);
-        }
-
-        label{
-          @apply --oe-label-mixin;
-        }
+        ${inputStyles}
       </style>
       <paper-input-container no-label-float="[[noLabelFloat]]" always-float-label="[[_computeAlwaysFloatLabel(alwaysFloatLabel,placeholder)]]"
         auto-validate$="[[autoValidate]]" disabled$="[[disabled]]" invalid="[[invalid]]">
